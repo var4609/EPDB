@@ -6,7 +6,9 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
-plugins {}
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
 
 rootProject.name = "EPDB"
-include("application", "storage", "engine")
+include("application", "engine", "storage")

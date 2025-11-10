@@ -1,8 +1,16 @@
 
 plugins {
-    kotlin("jvm")
+    java
+    application
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }

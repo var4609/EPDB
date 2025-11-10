@@ -1,9 +1,9 @@
-    plugins {
-        kotlin("jvm") version "2.2.20" apply false
-    }
+plugins {
+    java
+}
 
-    allprojects {
-        repositories {
-            mavenCentral()
-        }
+allprojects {
+    repositories {
+        mavenCentral()
     }
+}

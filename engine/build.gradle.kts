@@ -1,7 +1,7 @@
 plugins {
-    kotlin("jvm")
+    java
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    implementation(project(":storage"))
 }
