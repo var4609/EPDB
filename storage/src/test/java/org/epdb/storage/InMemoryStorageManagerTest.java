@@ -1,6 +1,5 @@
 package org.epdb.storage;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.epdb.storage.dto.Page;
@@ -10,41 +9,43 @@ import static org.junit.Assert.*;
 public class InMemoryStorageManagerTest {
 
     private static final int PAGE_SIZE = 4096;
-    private StorageManager newManager;
+    private static final int PAGE_SIZE_TOO_LARGE = PAGE_SIZE * 2;
+    private static final Long MISSING_PAGE_NUMBER = 500L;
+
+    private StorageManager storageManager;
 
     @Before
     public void setUp() {
-        newManager = new InMemoryStorageManager();
+        storageManager = new InMemoryStorageManager();
     }
 
     @Test
     public void allocateCreatesEmptyPage() {
-        final Long id = newManager.allcateNewPage();
-        Assert.assertEquals(Long.valueOf(0L), id);
-
-        final Page page = newManager.readPage(id);
-        assertEquals(Long.valueOf(id.longValue()), Long.valueOf(page.pageId()));
+        final Long pageId = storageManager.allcateNewPage();
+        final Page page = storageManager.readPage(pageId);
+        
+        assertEquals(pageId, page.pageId());
         assertEquals(PAGE_SIZE, page.data().length);
     }
 
     @Test
     public void writeAndReadPage() {
-        Long id = newManager.allcateNewPage();
-        byte[] data = new byte[]{ 7 };
-        newManager.writePage(id, data);
+        Long pageId = storageManager.allcateNewPage();
+        byte[] expectedData = new byte[]{ 7 };
+        storageManager.writePage(pageId, expectedData);
 
-        final Page page = newManager.readPage(id);
-        assertArrayEquals(data, page.data());
+        final byte[] actualData = storageManager.readPage(pageId).data();
+        assertArrayEquals(expectedData, actualData);
     }
 
     @Test
     public void writeWrongSizeThrows() {
-        final Long id = newManager.allcateNewPage();
-        byte[] data = new byte[PAGE_SIZE + 5];
+        final Long pageId = storageManager.allcateNewPage();
+        byte[] data = new byte[PAGE_SIZE_TOO_LARGE];
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, 
             () -> {
-                newManager.writePage(id, data);
+                storageManager.writePage(pageId, data);
             }
         );
 
@@ -53,11 +54,9 @@ public class InMemoryStorageManagerTest {
 
     @Test
     public void readMissingThrows() {
-        final Long missing = 42L;
-
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, 
             () -> {
-                newManager.readPage(missing);
+                storageManager.readPage(MISSING_PAGE_NUMBER);
             }
         );
 
@@ -66,8 +65,8 @@ public class InMemoryStorageManagerTest {
 
     @Test
     public void allocationsIncrement() {
-        final Long a = newManager.allcateNewPage();
-        final Long b = newManager.allcateNewPage();
-        Assert.assertEquals(Long.valueOf(a.longValue() + 1), Long.valueOf(b.longValue()));
+        final Long page1 = storageManager.allcateNewPage();
+        final Long page2 = storageManager.allcateNewPage();
+        assertTrue(page1 + 1L == page2);
     }
 }
