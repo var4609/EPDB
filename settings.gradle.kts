@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "EPDB"
-include("application", "engine", "storage")
+include("application", "engine", "buffer", "storage")
