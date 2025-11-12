@@ -4,12 +4,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Set;
 
 import org.epdb.buffer.BufferManager;
 import org.epdb.engine.comparison.ComparisonPredicate;
 import org.epdb.engine.comparison.Op;
 import org.epdb.engine.dto.Schema;
 import org.epdb.engine.dto.Tuple;
+import org.epdb.engine.volcano.Projection;
 import org.epdb.engine.volcano.Selection;
 import org.epdb.engine.volcano.TableScan;
 import org.epdb.storage.StorageManager;
@@ -75,6 +77,30 @@ public class Database {
         }
 
         filterOperator.close();
+    }
+
+    public void executeSelectQueryWithFilterAndProjection(String tableName) {
+        if(!tableName.equals("users")) {
+            System.out.println("Table not found: " + tableName);
+            return;
+        }
+
+        var scanOperator = new TableScan(bufferManager, schema, (long) USERS_TABLE_START_PAGE);
+        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, 150);
+        var filterOperator = new Selection(predicate, scanOperator);
+        var projectionOperator = new Projection(filterOperator, Set.of(0, 1));
+
+        System.out.println("\n--- Query Execution: SELECT id, name FROM users WHERE id > 150 ---");
+        System.out.println(Arrays.toString(schema.columnNames()));
+        System.out.println("---------------------------------------------");
+
+        projectionOperator.open();
+        Tuple tuple;
+        while((tuple = projectionOperator.next()) != null) {
+            System.out.println(tuple);
+        }
+
+        projectionOperator.close();
     }
 
     public void populateTestData() {
