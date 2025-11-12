@@ -32,7 +32,7 @@ public class TableScan implements Operator {
     public void open() {
         currentPageId = tableStartPageId;
         currentRowOffset = 0L;
-        System.out.println(String.format("TableScan opened at page ID: %d", currentPageId) );
+        System.out.printf("TableScan opened at page ID: %d%n", currentPageId);
     }
 
     @Override
@@ -82,10 +82,7 @@ public class TableScan implements Operator {
 
     @Override
     public void close() {
-        /**
-         * TODO: Should unpin the pages from buffer manager in a complete implementation.
-         */
-
+         // TODO: Should unpin the pages from buffer manager in a complete implementation.
         System.out.println("Scan: Closed TableScan.");
     }
 }

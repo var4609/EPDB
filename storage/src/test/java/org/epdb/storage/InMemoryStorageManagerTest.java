@@ -58,13 +58,13 @@ public class InMemoryStorageManagerTest {
             }
         );
 
-        assertTrue(thrown.getMessage().contains("does not exist") == true);
+        assertTrue(thrown.getMessage().contains("does not exist"));
     }
 
     @Test
     public void allocationsIncrement() {
         final var page1 = storageManager.allocateNewPage();
         final var page2 = storageManager.allocateNewPage();
-        assertTrue(page1 + 1L == page2);
+        assertEquals(page1 + 1L, (long) page2);
     }
 }

@@ -11,6 +11,7 @@ import org.epdb.engine.comparison.ComparisonPredicate;
 import org.epdb.engine.comparison.Op;
 import org.epdb.engine.dto.Schema;
 import org.epdb.engine.dto.Tuple;
+import org.epdb.engine.volcano.Insert;
 import org.epdb.engine.volcano.Projection;
 import org.epdb.engine.volcano.Selection;
 import org.epdb.engine.volcano.TableScan;
@@ -41,7 +42,7 @@ public class Database {
             return;
         }
 
-        var scanOperator = new TableScan(bufferManager, schema, (long) USERS_TABLE_START_PAGE);
+        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
 
         System.out.println("\n--- Query Execution: SELECT * FROM users ---");
         System.out.println(Arrays.toString(schema.columnNames()));
@@ -62,7 +63,7 @@ public class Database {
             return;
         }
 
-        var scanOperator = new TableScan(bufferManager, schema, (long) USERS_TABLE_START_PAGE);
+        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
         var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, 150);
         var filterOperator = new Selection(predicate, scanOperator);
 
@@ -85,7 +86,7 @@ public class Database {
             return;
         }
 
-        var scanOperator = new TableScan(bufferManager, schema, (long) USERS_TABLE_START_PAGE);
+        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
         var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, 150);
         var filterOperator = new Selection(predicate, scanOperator);
         var projectionOperator = new Projection(filterOperator, Set.of(0, 1));
@@ -103,36 +104,29 @@ public class Database {
         projectionOperator.close();
     }
 
+    public void executeInsert(Tuple tupleToInsert) {
+
+        Insert insertOperator = new Insert(
+                bufferManager,
+                tupleToInsert,
+                USERS_TABLE_START_PAGE
+        );
+
+        insertOperator.open();
+        insertOperator.next();
+        insertOperator.close();
+    }
+
     public void populateTestData() {
         System.out.println("\n--- Admin: Populating Test Data Directly to Storage ---");
-
-        var pageId = USERS_TABLE_START_PAGE;
-        var page = bufferManager.getPage(pageId);
-        var byteBuffer = ByteBuffer.wrap(page.data());
-        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-
-        var rowOffset = 0;
         var rowCount = 500;
 
         for(var i=0; i<rowCount; i++) {
-            if(rowOffset + ROW_SIZE > PAGE_SIZE) {
-                break;
-            }
-
+            var id = i + 100;
             var name = "User_" + i;
-            var nameBytes = name.getBytes(StandardCharsets.UTF_8);
+            var age = 20 + i;
 
-            byteBuffer.position(rowOffset);
-            byteBuffer.putInt(i + 100);
-
-            byteBuffer.put(nameBytes, 0, Math.min(nameBytes.length, 20));
-
-            byteBuffer.position(rowOffset + 4 + 20);
-            byteBuffer.putInt(20 + i);
-
-            rowOffset += ROW_SIZE;
+            executeInsert(new Tuple(new Object[]{id, name, age}));
         }
-
-        storageManager.writePage(pageId, byteBuffer.array());
     }
 }
