@@ -6,8 +6,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.epdb.buffer.BufferManager;
+import org.epdb.engine.comparison.ComparisonPredicate;
+import org.epdb.engine.comparison.Op;
 import org.epdb.engine.dto.Schema;
 import org.epdb.engine.dto.Tuple;
+import org.epdb.engine.volcano.Selection;
 import org.epdb.engine.volcano.TableScan;
 import org.epdb.storage.StorageManager;
 
@@ -49,6 +52,29 @@ public class Database {
         }
 
         scanOperator.close();
+    }
+
+    public void executeSelectQueryWithFilter(String tableName) {
+        if(!tableName.equals("users")) {
+            System.out.println("Table not found: " + tableName);
+            return;
+        }
+
+        var scanOperator = new TableScan(bufferManager, schema, (long) USERS_TABLE_START_PAGE);
+        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, 150);
+        var filterOperator = new Selection(predicate, scanOperator);
+
+        System.out.println("\n--- Query Execution: SELECT * FROM users WHERE id > 150 ---");
+        System.out.println(Arrays.toString(schema.columnNames()));
+        System.out.println("---------------------------------------------");
+
+        filterOperator.open();
+        Tuple tuple;
+        while((tuple = filterOperator.next()) != null) {
+            System.out.println(tuple);
+        }
+
+        filterOperator.close();
     }
 
     public void populateTestData() {
