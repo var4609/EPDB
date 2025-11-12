@@ -2,8 +2,6 @@ package org.epdb.storage;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.epdb.storage.dto.Page;
-
 import static org.junit.Assert.*;
 
 public class InMemoryStorageManagerTest {
@@ -21,8 +19,8 @@ public class InMemoryStorageManagerTest {
 
     @Test
     public void allocateCreatesEmptyPage() {
-        final Long pageId = storageManager.allcateNewPage();
-        final Page page = storageManager.readPage(pageId);
+        final var pageId = storageManager.allocateNewPage();
+        final var page = storageManager.readPage(pageId);
         
         assertEquals(pageId, page.pageId());
         assertEquals(PAGE_SIZE, page.data().length);
@@ -30,18 +28,18 @@ public class InMemoryStorageManagerTest {
 
     @Test
     public void writeAndReadPage() {
-        Long pageId = storageManager.allcateNewPage();
-        byte[] expectedData = new byte[]{ 7 };
+        var pageId = storageManager.allocateNewPage();
+        var expectedData = new byte[]{ 7 };
         storageManager.writePage(pageId, expectedData);
 
-        final byte[] actualData = storageManager.readPage(pageId).data();
+        final var actualData = storageManager.readPage(pageId).data();
         assertArrayEquals(expectedData, actualData);
     }
 
     @Test
     public void writeWrongSizeThrows() {
-        final Long pageId = storageManager.allcateNewPage();
-        byte[] data = new byte[PAGE_SIZE_TOO_LARGE];
+        final var pageId = storageManager.allocateNewPage();
+        final var data = new byte[PAGE_SIZE_TOO_LARGE];
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, 
             () -> {
@@ -65,8 +63,8 @@ public class InMemoryStorageManagerTest {
 
     @Test
     public void allocationsIncrement() {
-        final Long page1 = storageManager.allcateNewPage();
-        final Long page2 = storageManager.allcateNewPage();
+        final var page1 = storageManager.allocateNewPage();
+        final var page2 = storageManager.allocateNewPage();
         assertTrue(page1 + 1L == page2);
     }
 }

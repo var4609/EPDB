@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
     implementation(project(":engine"))
+    implementation(project(":buffer"))
+    implementation(project(":storage"))
 }
 
 application {

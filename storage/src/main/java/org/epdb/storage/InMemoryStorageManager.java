@@ -20,11 +20,11 @@ public class InMemoryStorageManager implements StorageManager {
     @Override
     public Page readPage(Long pageId) {
         if (!inMemoryStorage.containsKey(pageId)) {
-            throw new IllegalArgumentException("Page with ID " + pageId + " does not exist");
+            throw new IllegalArgumentException(String.format("Page with ID %d does not exist", pageId));
         }
         
-        byte[] pageData = this.inMemoryStorage.get(pageId);
-        System.out.println("Reading page with ID $pageId");
+        final var pageData = this.inMemoryStorage.get(pageId);
+        System.out.println(String.format("Reading page with ID %d", pageId));
         return new Page(pageId, pageData);
     }
 
@@ -34,15 +34,15 @@ public class InMemoryStorageManager implements StorageManager {
             throw new IllegalArgumentException("Data size must be equal to PAGE_SIZE");
         }
 
-        System.out.println("Writing page with ID $pageId");
+        System.out.println(String.format("Writing page with ID %d", pageId));
         inMemoryStorage.put(pageId, data);
     }
 
     @Override
-    public Long allcateNewPage() {
-        final Long pageId = this.nextPageId;
+    public Long allocateNewPage() {
+        final var pageId = this.nextPageId;
         inMemoryStorage.put(pageId, createEmptyPageData());
-        nextPageId++;
+        this.nextPageId++;
         return pageId;
     }
 

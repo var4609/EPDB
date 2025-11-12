@@ -1,7 +1,6 @@
 package org.epdb.buffer;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.epdb.buffer.dto.BufferFrame;
@@ -25,9 +24,9 @@ public class InMemoryBufferManager implements BufferManager {
         if(this.bufferFrames.containsKey(pageId)) {
             return this.bufferFrames.get(pageId).page();
         } else {
-            final Page page = this.storageManager.readPage(pageId);
+            final var page = this.storageManager.readPage(pageId);
             if(this.bufferFrames.size() >= this.bufferSize) {
-                Long victimKey = Collections.min(this.bufferFrames.keySet());
+                var victimKey = Collections.min(this.bufferFrames.keySet());
 
                 if(this.bufferFrames.get(victimKey).isDirty()) {
                     flushPage(this.bufferFrames.get(victimKey).page());
