@@ -3,16 +3,11 @@ package org.epdb.engine.volcano;
 import org.epdb.engine.comparison.Predicate;
 import org.epdb.engine.dto.Tuple;
 
-public class Selection implements Operator {
+public record Selection(
+        Predicate predicate,
+        Operator childOperator
+) implements Operator {
 
-    private final Predicate predicate;
-    private final Operator childOperator;
-
-    public Selection(final Predicate predicate, final Operator childOperator) {
-        this.predicate = predicate;
-        this.childOperator = childOperator;
-    }
-    
     @Override
     public void open() {
         this.childOperator.open();
@@ -21,14 +16,14 @@ public class Selection implements Operator {
 
     @Override
     public Tuple next() {
-        while(true) {
+        while (true) {
             var tuple = childOperator.next();
 
-            if(tuple == null) {
-                return tuple;
+            if (tuple == null) {
+                return null;
             }
 
-            if(predicate.evaluate(tuple)) {
+            if (predicate.evaluate(tuple)) {
                 System.out.println("Selection: Tuple passed filter: " + tuple);
                 return tuple;
             } else {
@@ -42,5 +37,5 @@ public class Selection implements Operator {
         this.childOperator.close();
         System.out.println("Closed child operator...");
     }
-    
+
 }

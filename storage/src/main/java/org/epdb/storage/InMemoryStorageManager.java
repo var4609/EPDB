@@ -8,13 +8,14 @@ import org.epdb.storage.dto.Page;
 public class InMemoryStorageManager implements StorageManager {
 
     private static final int PAGE_SIZE = 4096;
+    public static final long NEXT_PAGE_ID = 0L;
 
     private final Map<Long, byte[]> inMemoryStorage;
     private Long nextPageId;
 
     public InMemoryStorageManager() {
         this.inMemoryStorage = new HashMap<>();
-        this.nextPageId = 0L;
+        this.nextPageId = NEXT_PAGE_ID;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class InMemoryStorageManager implements StorageManager {
         }
         
         final var pageData = this.inMemoryStorage.get(pageId);
-        System.out.println(String.format("Reading page with ID %d", pageId));
+        System.out.printf("Reading page with ID %d%n", pageId);
         return new Page(pageId, pageData);
     }
 
@@ -34,7 +35,7 @@ public class InMemoryStorageManager implements StorageManager {
             throw new IllegalArgumentException("Data size must be equal to PAGE_SIZE");
         }
 
-        System.out.println(String.format("Writing page with ID %d", pageId));
+        System.out.printf("Writing page with ID %d%n", pageId);
         inMemoryStorage.put(pageId, data);
     }
 
