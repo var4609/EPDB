@@ -4,8 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import org.epdb.buffer.BufferManager;
-import org.epdb.engine.dto.Schema;
-import org.epdb.engine.dto.Tuple;
+import org.epdb.engine.dto.*;
 import org.epdb.storage.dto.Page;
 
 public class TableScan implements Operator {
@@ -59,16 +58,16 @@ public class TableScan implements Operator {
             byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
             byteBuffer.position(currentRowOffset.intValue());
 
-            Object[] values = new Object[schema.getColumnCount()];
+            ColumnValue[] values = new ColumnValue[schema.getColumnCount()];
 
             try {
-                values[0] = byteBuffer.getInt(); // id
+                values[0] = new IntValue(byteBuffer.getInt()); // id
 
                 byte[] nameBytes = new byte[20];
                 byteBuffer.get(nameBytes);
-                values[1] = new String(nameBytes).trim(); // name
+                values[1] = new StringValue(new String(nameBytes).trim()); // name
 
-                values[2] = byteBuffer.getInt(); // age
+                values[2] = new IntValue(byteBuffer.getInt()); // age
             } catch (Exception e) {
                 e.printStackTrace();
                 currentRowOffset = PAGE_SIZE; 

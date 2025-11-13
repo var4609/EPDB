@@ -2,6 +2,7 @@ package org.epdb.engine.volcano;
 
 import java.util.Set;
 
+import org.epdb.engine.dto.ColumnValue;
 import org.epdb.engine.dto.Tuple;
 
 public record Projection(
@@ -21,10 +22,10 @@ public record Projection(
             var tuple = childOperator.next();
 
             if (tuple == null) {
-                return tuple;
+                return null;
             }
 
-            Object[] values = new Object[this.projectionColumns.size()];
+            ColumnValue[] values = new ColumnValue[this.projectionColumns.size()];
             int k = 0;
             for (var i = 0; i < tuple.values().length; i++) {
                 if (this.projectionColumns.contains(i)) {

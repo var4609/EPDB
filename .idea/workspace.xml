@@ -4,46 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7710da3-839f-4ed3-9eae-c8879a93d112" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_13_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__net_bytebuddy_byte_buddy_1_17_7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__net_bytebuddy_byte_buddy_agent_1_17_7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_core_1_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_mockito_mockito_core_5_20_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_objenesis_objenesis_3_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/EPDB.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/EPDB.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/EPDB.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/application/EPDB.application.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/application/EPDB.application.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/application/EPDB.application.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/buffer/EPDB.buffer.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/buffer/EPDB.buffer.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/buffer/EPDB.buffer.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/engine/EPDB.engine.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/engine/EPDB.engine.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/engine/EPDB.engine.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/storage/EPDB.storage.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/storage/EPDB.storage.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/storage/EPDB.storage.test.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Insert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/src/main/java/org/epdb/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/application/src/main/java/org/epdb/app/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buffer/src/main/java/org/epdb/buffer/InMemoryBufferManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/buffer/src/main/java/org/epdb/buffer/InMemoryBufferManager.java" afterDir="false" />
+    <list default="true" id="f8331788-dd03-45f0-b67b-9cb65f74a363" name="Changes" comment="Implements type-safety for data stored in the DB.&#10;&#10;Resolves #4">
       <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/database/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Projection.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Projection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Selection.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Selection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/TableScan.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/TableScan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/storage/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/main/java/org/epdb/storage/InMemoryStorageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/main/java/org/epdb/storage/InMemoryStorageManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/src/test/java/org/epdb/storage/InMemoryStorageManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/storage/src/test/java/org/epdb/storage/InMemoryStorageManagerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +51,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
         <option value="Record" />
       </list>
@@ -97,41 +60,66 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {}
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/var4609/EPDB.git",
-    "accountId": "c32b1731-5afb-4b25-9574-cc943c6fc6fd"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;var4609&quot;
   }
-}]]></component>
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="type-safety" />
+                    <option name="lastUsedInstant" value="1763063363" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1763063330" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/var4609/EPDB.git&quot;,
+    &quot;accountId&quot;: &quot;c32b1731-5afb-4b25-9574-cc943c6fc6fd&quot;
+  }
+}</component>
   <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-9.2.0-bin/11i5gvueggl8a5cioxuftxrik/gradle-9.2.0" javaHome="/Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home" gradleVersion="9.2.0" />
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
+  &quot;associatedIndex&quot;: 5
 }</component>
-  <component name="ProjectId" id="35OQOtn8d4PMlzmNfe5ZxoKb0in" />
+  <component name="ProjectId" id="35R7CWDhu5r4EvU9kiegrpfQkpi" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Gradle.Build EPDB.executor": "Run",
     "Gradle.EPDB [release].executor": "Run",
-    "Gradle.EPDB:application [:application:org.epdb.app.Main.main()].executor": "Debug",
-    "Gradle.Tests in 'EPDB.storage.test'.executor": "Run",
+    "Gradle.EPDB:application [:application:org.epdb.app.Main.main()].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "insert__operator",
+    "git-widget-placeholder": "type-safety",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/niveditapatil/workplace/EPDB",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Color Scheme Font"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Gradle.EPDB [release]">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.epdb.app.Main" />
       <module name="EPDB.application.main" />
@@ -167,53 +155,30 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Tests in 'EPDB.storage.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":storage:test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Gradle.EPDB [release]" />
-        <item itemvalue="Gradle.Tests in 'EPDB.storage.test'" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e7710da3-839f-4ed3-9eae-c8879a93d112" name="Changes" comment="" />
-      <created>1762978610218</created>
+      <changelist id="f8331788-dd03-45f0-b67b-9cb65f74a363" name="Changes" comment="Implements INSERT operator.&#10;&#10;Resolves #7" />
+      <created>1763060903896</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1762978610218</updated>
+      <updated>1763060903896</updated>
     </task>
+    <task id="LOCAL-00001" summary="Implements type-safety for data stored in the DB.&#10;&#10;Resolves #4">
+      <option name="closed" value="true" />
+      <created>1763063438810</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1763063438810</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -238,6 +203,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implements type-safety for data stored in the DB.&#10;&#10;Resolves #4" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implements type-safety for data stored in the DB.&#10;&#10;Resolves #4" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/EPDB$EPDB__release_.ic" NAME="EPDB [release] Coverage Results" MODIFIED="1762979676074" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
