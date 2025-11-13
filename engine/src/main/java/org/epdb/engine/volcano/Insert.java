@@ -1,6 +1,8 @@
 package org.epdb.engine.volcano;
 
 import org.epdb.buffer.BufferManager;
+import org.epdb.engine.dto.IntValue;
+import org.epdb.engine.dto.StringValue;
 import org.epdb.engine.dto.Tuple;
 
 import java.nio.ByteBuffer;
@@ -45,16 +47,17 @@ public class Insert implements Operator {
         buffer.position(insertOffset);
 
         try {
-            var id = (Integer) tupleToInsert.getValueAtIndex(0);
-            var name = (String) tupleToInsert.getValueAtIndex(1);
-            var age = (Integer) tupleToInsert.getValueAtIndex(2);
-            buffer.putInt(id);
-            var nameBytes = name.getBytes(StandardCharsets.UTF_8);
+            var id = (IntValue) tupleToInsert.getValueAtIndex(0);
+            var name = (StringValue) tupleToInsert.getValueAtIndex(1);
+            var age = (IntValue) tupleToInsert.getValueAtIndex(2);
+
+            buffer.putInt(id.value());
+            var nameBytes = name.value().getBytes(StandardCharsets.UTF_8);
             buffer.put(nameBytes, 0, Math.min(nameBytes.length, NAME_SIZE));
             for (int i = nameBytes.length; i < NAME_SIZE; i++) {
                 buffer.put((byte) 0);
             }
-            buffer.putInt(age);
+            buffer.putInt(age.value());
             this.currentRowCount++;
             System.out.printf("Insert: Successfully serialized new row at offset %d.\n", insertOffset);
 

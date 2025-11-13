@@ -9,8 +9,7 @@ import java.util.Set;
 import org.epdb.buffer.BufferManager;
 import org.epdb.engine.comparison.ComparisonPredicate;
 import org.epdb.engine.comparison.Op;
-import org.epdb.engine.dto.Schema;
-import org.epdb.engine.dto.Tuple;
+import org.epdb.engine.dto.*;
 import org.epdb.engine.volcano.Insert;
 import org.epdb.engine.volcano.Projection;
 import org.epdb.engine.volcano.Selection;
@@ -122,11 +121,11 @@ public class Database {
         var rowCount = 500;
 
         for(var i=0; i<rowCount; i++) {
-            var id = i + 100;
-            var name = "User_" + i;
-            var age = 20 + i;
+            var id = new IntValue(i + 100);
+            var name = new StringValue("User_" + i);
+            var age = new IntValue(20 + i);
 
-            executeInsert(new Tuple(new Object[]{id, name, age}));
+            executeInsert(new Tuple(new ColumnValue[]{id, name, age}));
         }
     }
 }

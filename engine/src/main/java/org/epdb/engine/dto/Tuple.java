@@ -2,9 +2,9 @@ package org.epdb.engine.dto;
 
 import java.util.Arrays;
 
-public record Tuple(Object[] values) {
+public record Tuple(ColumnValue[] values) {
 
-    public Object getValueAtIndex(int index) {
+    public ColumnValue getValueAtIndex(int index) {
         return this.values()[index];
     }
 
