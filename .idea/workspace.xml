@@ -4,18 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f8331788-dd03-45f0-b67b-9cb65f74a363" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/dto/ColumnValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/dto/IntValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/dto/StringValue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/comparison/ComparisonPredicate.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/comparison/ComparisonPredicate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/comparison/Op.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/comparison/Op.java" afterDir="false" />
+    <list default="true" id="f8331788-dd03-45f0-b67b-9cb65f74a363" name="Changes" comment="Implements type-safety for data stored in the DB.&#10;&#10;Resolves #4">
       <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/database/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/dto/Tuple.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/dto/Tuple.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Insert.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Insert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Projection.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/Projection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/TableScan.java" beforeDir="false" afterPath="$PROJECT_DIR$/engine/src/main/java/org/epdb/engine/volcano/TableScan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +119,7 @@
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Gradle.EPDB [release]">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.epdb.app.Main" />
       <module name="EPDB.application.main" />
@@ -180,6 +170,15 @@
       <option name="presentableId" value="Default" />
       <updated>1763060903896</updated>
     </task>
+    <task id="LOCAL-00001" summary="Implements type-safety for data stored in the DB.&#10;&#10;Resolves #4">
+      <option name="closed" value="true" />
+      <created>1763063438810</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1763063438810</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -204,6 +203,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implements type-safety for data stored in the DB.&#10;&#10;Resolves #4" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implements type-safety for data stored in the DB.&#10;&#10;Resolves #4" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/EPDB$EPDB__release_.ic" NAME="EPDB [release] Coverage Results" MODIFIED="1762979676074" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />

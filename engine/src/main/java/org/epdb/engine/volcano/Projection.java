@@ -22,7 +22,7 @@ public record Projection(
             var tuple = childOperator.next();
 
             if (tuple == null) {
-                return tuple;
+                return null;
             }
 
             ColumnValue[] values = new ColumnValue[this.projectionColumns.size()];
