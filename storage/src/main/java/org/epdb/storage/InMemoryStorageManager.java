@@ -1,5 +1,6 @@
 package org.epdb.storage;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +49,8 @@ public class InMemoryStorageManager implements StorageManager {
     }
 
     private byte[] createEmptyPageData() {
-        return new byte[PAGE_SIZE];
+        var data = new byte[PAGE_SIZE];
+        Arrays.fill(data, (byte) 0);
+        return data;
     }
 }

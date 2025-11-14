@@ -58,7 +58,7 @@ public class Database {
         }
 
         var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
-        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, 150);
+        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(102));
         var filterOperator = new Selection(predicate, scanOperator);
 
         System.out.println("\n--- Query Execution: SELECT * FROM users WHERE id > 150 ---");
@@ -81,7 +81,7 @@ public class Database {
         }
 
         var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
-        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, 150);
+        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(102));
         var filterOperator = new Selection(predicate, scanOperator);
         var projectionOperator = new Projection(filterOperator, Set.of(0, 1));
 
@@ -113,7 +113,7 @@ public class Database {
 
     public void populateTestData() {
         System.out.println("\n--- Admin: Populating Test Data Directly to Storage ---");
-        var rowCount = 500;
+        var rowCount = 50;
 
         for(var i=0; i<rowCount; i++) {
             var id = new IntValue(i + 100);

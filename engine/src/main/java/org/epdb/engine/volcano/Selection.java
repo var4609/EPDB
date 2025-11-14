@@ -24,10 +24,7 @@ public record Selection(
             }
 
             if (predicate.evaluate(tuple)) {
-                System.out.println("Selection: Tuple passed filter: " + tuple);
                 return tuple;
-            } else {
-                System.out.println("Selection: Tuple rejected.");
             }
         }
     }
