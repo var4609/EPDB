@@ -4,6 +4,7 @@ import org.epdb.buffer.BufferManager;
 import org.epdb.engine.dto.IntValue;
 import org.epdb.engine.dto.StringValue;
 import org.epdb.engine.dto.Tuple;
+import org.epdb.storage.pagemanager.PageManager;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -11,14 +12,12 @@ import java.nio.charset.StandardCharsets;
 
 public class Insert implements Operator {
 
-    private static final int ROW_SIZE = 28;
     private static final int NAME_SIZE = 20;
 
     private final BufferManager bufferManager;
     private final Tuple tupleToInsert;
     private final Long tableStartPageId;
 
-    private int currentRowCount;
     private boolean isExecuted;
 
     public Insert(final BufferManager bufferManager, final Tuple tupleToInsert, Long tableStartPage) {
@@ -26,7 +25,6 @@ public class Insert implements Operator {
         this.tupleToInsert = tupleToInsert;
         this.isExecuted = false;
         this.tableStartPageId = tableStartPage;
-        this.currentRowCount = 0;
     }
 
     @Override
@@ -38,14 +36,19 @@ public class Insert implements Operator {
             return null;
         }
 
-        System.out.printf("Insert: Starting execution for tuple: %s", tupleToInsert);
         var page = bufferManager.getPage(this.tableStartPageId);
+        var pageManager = new PageManager();
         var data = page.data();
-        var insertOffset = this.currentRowCount * ROW_SIZE;
         var buffer = ByteBuffer.wrap(data);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        buffer.position(insertOffset);
+        var newRowOffset = pageManager.getFreeSpaceOffsetAddr(buffer);
 
+        if(!pageManager.isSpaceAvailable(buffer, newRowOffset, 28)) {
+            //TODO: Move to next page
+            return null;
+        }
+
+        buffer.position(newRowOffset);
         try {
             var id = (IntValue) tupleToInsert.getValueAtIndex(0);
             var name = (StringValue) tupleToInsert.getValueAtIndex(1);
@@ -58,10 +61,12 @@ public class Insert implements Operator {
                 buffer.put((byte) 0);
             }
             buffer.putInt(age.value());
-            this.currentRowCount++;
-            System.out.printf("Insert: Successfully serialized new row at offset %d.\n", insertOffset);
+            pageManager.addSlot(buffer, newRowOffset, 28);
+            pageManager.incrementFreeSpaceOffset(buffer, newRowOffset);
 
+            System.out.printf("Insert: Successfully serialized new row at offset %d.\n", newRowOffset);
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.printf("Insert Error during serialization: %s", e.getMessage());
             this.isExecuted = true;
             return null;
@@ -72,7 +77,5 @@ public class Insert implements Operator {
     }
 
     @Override
-    public void close() {
-        System.out.println("Insert: Closed operator.");
-    }
+    public void close() {}
 }

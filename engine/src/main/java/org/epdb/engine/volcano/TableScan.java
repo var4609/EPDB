@@ -1,80 +1,69 @@
 package org.epdb.engine.volcano;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import org.epdb.buffer.BufferManager;
 import org.epdb.engine.dto.*;
 import org.epdb.storage.dto.Page;
+import org.epdb.storage.pagemanager.PageManager;
 
 public class TableScan implements Operator {
 
-    private static final Long PAGE_SIZE = 4096L;
-    private static final int ROW_SIZE = 28;
     private static final int TABLE_PAGE_LIMIT = 1;
 
     private final BufferManager bufferManager;
     private final Schema schema;
     private final Long tableStartPageId;
     private Long currentPageId;
-    private Long currentRowOffset;
     private Page currentPage;
+    private final PageManager pageManager;
+    private int currentSlotIndex;
 
     public TableScan(BufferManager bufferManager, Schema schema, Long tableStartPageId) {
         this.bufferManager = bufferManager;
         this.schema = schema;
         this.tableStartPageId = tableStartPageId;
         this.currentPage = null;
+        this.currentSlotIndex = 0;
+        this.pageManager = new PageManager();
     }
 
     @Override
     public void open() {
         currentPageId = tableStartPageId;
-        currentRowOffset = 0L;
+        currentSlotIndex = 0;
+        currentPage = bufferManager.getPage(currentPageId);
         System.out.printf("TableScan opened at page ID: %d%n", currentPageId);
     }
 
     @Override
     public Tuple next() {
         while(true) {
-            if(currentPage == null || currentRowOffset >= PAGE_SIZE) {
-                if(currentPageId >= tableStartPageId + TABLE_PAGE_LIMIT) {
+            if(currentSlotIndex >= this.pageManager.getNumSlots(currentPage)) {
+                if(currentPageId >= tableStartPageId + TABLE_PAGE_LIMIT - 1) {
                     return null;
                 }
 
                 currentPage = bufferManager.getPage(currentPageId);
-                currentRowOffset = 0L;
                 currentPageId += 1;
+                currentSlotIndex = 0;
                 continue;
             }
 
-            if(currentRowOffset + ROW_SIZE > PAGE_SIZE) {
-                currentRowOffset = PAGE_SIZE;
-                continue;
-            }
-
-            var data = currentPage.data();
-            var byteBuffer = ByteBuffer.wrap(data);
-            byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-            byteBuffer.position(currentRowOffset.intValue());
-
+            var recordBytes = pageManager.getRecordFromSlotAt(currentPage, currentSlotIndex);
             ColumnValue[] values = new ColumnValue[schema.getColumnCount()];
-
             try {
-                values[0] = new IntValue(byteBuffer.getInt()); // id
+                values[0] = new IntValue(recordBytes.getInt()); // id
 
                 byte[] nameBytes = new byte[20];
-                byteBuffer.get(nameBytes);
+                recordBytes.get(nameBytes);
                 values[1] = new StringValue(new String(nameBytes).trim()); // name
 
-                values[2] = new IntValue(byteBuffer.getInt()); // age
+                values[2] = new IntValue(recordBytes.getInt()); // age
             } catch (Exception e) {
                 e.printStackTrace();
-                currentRowOffset = PAGE_SIZE; 
                 continue;
             }
 
-            currentRowOffset += ROW_SIZE;
+            this.currentSlotIndex++;
             return new Tuple(values);
         }
     }

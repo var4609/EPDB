@@ -6,7 +6,7 @@ import org.epdb.engine.dto.Tuple;
 public record ComparisonPredicate(
         int columnIndex,
         Op operator,
-        Object constantValue
+        ColumnValue constantValue
 ) implements Predicate {
 
     @Override
