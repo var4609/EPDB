@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.epdb.storage.dto.Page;
 
-import static org.epdb.storage.PageConstants.*;
+import static org.epdb.storage.pagemanager.PageConstants.*;
 
 public class InMemoryStorageManager implements StorageManager {
 

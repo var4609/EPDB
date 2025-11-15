@@ -7,4 +7,6 @@ public interface BufferManager {
     Page getPage(Long pageId);
 
     void flushPage(Page page);
+
+    Page allocateNewPage(int tableId);
 }
