@@ -1,10 +1,13 @@
 package org.epdb.storage;
 
-import java.util.Arrays;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.epdb.storage.dto.Page;
+
+import static org.epdb.storage.PageConstants.*;
 
 public class InMemoryStorageManager implements StorageManager {
 
@@ -43,14 +46,25 @@ public class InMemoryStorageManager implements StorageManager {
     @Override
     public Long allocateNewPage() {
         final var pageId = this.nextPageId;
-        inMemoryStorage.put(pageId, createEmptyPageData());
+        final var data = createEmptyPageData();
+
+        inMemoryStorage.put(pageId, data);
         this.nextPageId++;
         return pageId;
     }
 
-    private byte[] createEmptyPageData() {
-        var data = new byte[PAGE_SIZE];
-        Arrays.fill(data, (byte) 0);
+    /*
+     * Package-private helper to create a fresh page byte array with
+     * the appropriate header initialized. Extracted to improve testability
+     * and single responsibility of allocateNewPage().
+     */
+    byte[] createEmptyPageData() {
+        final var data = new byte[PAGE_SIZE];
+        var byteBuffer = ByteBuffer.wrap(data);
+        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        byteBuffer.putInt(HEADER_FREE_SPACE_OFFSET_ADDR, HEADER_SIZE_IN_BYTES);
+        byteBuffer.putInt(HEADER_NUM_ROWS_ADDR, 0);
+        byteBuffer.putInt(HEADER_NEXT_PAGE_ID_ADDR, NO_NEXT_PAGE);
         return data;
     }
 }

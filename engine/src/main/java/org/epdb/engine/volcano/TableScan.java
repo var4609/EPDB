@@ -48,7 +48,7 @@ public class TableScan implements Operator {
                 continue;
             }
 
-            var recordBytes = pageManager.getRecordFromSlotAt(currentPage, currentSlotIndex);
+            var recordBytes = pageManager.getTupleFromSlotAt(currentPage, currentSlotIndex);
             ColumnValue[] values = new ColumnValue[schema.getColumnCount()];
             try {
                 values[0] = new IntValue(recordBytes.getInt()); // id

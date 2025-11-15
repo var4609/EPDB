@@ -5,15 +5,9 @@ import org.epdb.storage.dto.Page;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class PageManager {
+import static org.epdb.storage.PageConstants.*;
 
-    private static final int PAGE_SIZE_IN_BYTES = 4096;
-    private static final int HEADER_SIZE_IN_BYTES = 8;
-    private static final int HEADER_FREE_SPACE_OFFSET_ADDR = 0;
-    private static final int HEADER_NUM_ROWS_ADDR = 4;
-    private static final int SLOT_SIZE_IN_BYTES = 8;
-    private static final int SLOT_RECORD_OFFSET_SIZE_IN_BYTES = 4;
-    private static final int ROW_SIZE_IN_BYTES = 28;
+public class PageManager {
 
     public int getFreeSpaceOffsetAddr(final ByteBuffer byteBuffer) {
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -42,10 +36,7 @@ public class PageManager {
 
     public void incrementFreeSpaceOffset(final ByteBuffer byteBuffer, final int oldOffset) {
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        int newVal = oldOffset + ROW_SIZE_IN_BYTES;
-        ByteBuffer temp = ByteBuffer.allocate(4);
-        temp.putInt(HEADER_FREE_SPACE_OFFSET_ADDR, newVal);
-        byteBuffer.putInt(HEADER_FREE_SPACE_OFFSET_ADDR, newVal);
+        byteBuffer.putInt(HEADER_FREE_SPACE_OFFSET_ADDR, oldOffset + ROW_SIZE_IN_BYTES);
         incrementRowCounter(byteBuffer);
     }
 
@@ -72,7 +63,7 @@ public class PageManager {
         return rowOffset + newRowSize < getSlotOffset(byteBuffer);
     }
 
-    public ByteBuffer getRecordFromSlotAt(Page page, int slotIndex) {
+    public ByteBuffer getTupleFromSlotAt(Page page, int slotIndex) {
         final ByteBuffer byteBuffer = ByteBuffer.wrap(page.data()).duplicate();
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
