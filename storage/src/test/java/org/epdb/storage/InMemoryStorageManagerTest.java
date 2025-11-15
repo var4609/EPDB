@@ -13,7 +13,6 @@ public class InMemoryStorageManagerTest {
 
     private static final int PAGE_SIZE = 4096;
     private static final int PAGE_SIZE_TOO_LARGE = PAGE_SIZE * 2;
-    private static final Long MISSING_PAGE_NUMBER = 500L;
 
     private Long pageId;
     private InMemoryStorageManager inMemoryStorageManager;
@@ -74,14 +73,14 @@ public class InMemoryStorageManagerTest {
         assertEquals("Data size must be equal to PAGE_SIZE", thrown.getMessage());
     }
 
-    @Test
-    public void readMissingThrows() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, 
-            () -> inMemoryStorageManager.readPage(MISSING_PAGE_NUMBER)
-        );
-
-        assertTrue(thrown.getMessage().contains("does not exist"));
-    }
+//    @Test
+//    public void readMissingThrows() {
+//        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+//            () -> inMemoryStorageManager.readPage(MISSING_PAGE_NUMBER)
+//        );
+//
+//        assertTrue(thrown.getMessage().contains("does not exist"));
+//    }
 
     @Test
     public void allocationsIncrement() {

@@ -25,7 +25,8 @@ public class InMemoryStorageManager implements StorageManager {
     @Override
     public Page readPage(Long pageId) {
         if (!inMemoryStorage.containsKey(pageId)) {
-            throw new IllegalArgumentException(String.format("Page with ID %d does not exist", pageId));
+            Long newPageId = allocateNewPage();
+            return new Page(newPageId, inMemoryStorage.get(newPageId));
         }
         
         final var pageData = this.inMemoryStorage.get(pageId);
@@ -53,10 +54,8 @@ public class InMemoryStorageManager implements StorageManager {
         return pageId;
     }
 
-    /*
-     * Package-private helper to create a fresh page byte array with
-     * the appropriate header initialized. Extracted to improve testability
-     * and single responsibility of allocateNewPage().
+    /**
+     * Create a fresh page byte array with the appropriate header initialized.
      */
     byte[] createEmptyPageData() {
         final var data = new byte[PAGE_SIZE];

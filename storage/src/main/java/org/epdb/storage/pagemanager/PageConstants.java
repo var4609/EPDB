@@ -10,4 +10,5 @@ public class PageConstants {
     public static final int SLOT_RECORD_OFFSET_SIZE_IN_BYTES = 4;
     public static final int ROW_SIZE_IN_BYTES = 28;
     public static final int NO_NEXT_PAGE = -1;
+    public static final int TABLE_PAGE_LIMIT = 5;
 }

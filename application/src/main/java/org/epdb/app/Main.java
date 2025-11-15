@@ -16,8 +16,8 @@ public class Main {
         var bufferManager = new InMemoryBufferManager(storageManager, 10, new HashMap<>());
         var db = new Database(bufferManager,  storageManager);
         db.populateTestData();
-        db.executeSelectQuery("users");
-         db.executeSelectQueryWithFilter("users");
+//        db.executeSelectQuery("users");
+//        db.executeSelectQueryWithFilter("users");
         db.executeSelectQueryWithFilterAndProjection("users");
     }
 }

@@ -5,17 +5,18 @@ import org.epdb.engine.dto.*;
 import org.epdb.storage.dto.Page;
 import org.epdb.storage.pagemanager.PageManager;
 
-public class TableScan implements Operator {
+import static org.epdb.storage.pagemanager.PageConstants.TABLE_PAGE_LIMIT;
 
-    private static final int TABLE_PAGE_LIMIT = 1;
+public class TableScan implements Operator {
 
     private final BufferManager bufferManager;
     private final Schema schema;
     private final Long tableStartPageId;
+    private final PageManager pageManager;
+
+    private int currentSlotIndex;
     private Long currentPageId;
     private Page currentPage;
-    private final PageManager pageManager;
-    private int currentSlotIndex;
 
     public TableScan(BufferManager bufferManager, Schema schema, Long tableStartPageId) {
         this.bufferManager = bufferManager;
@@ -38,7 +39,7 @@ public class TableScan implements Operator {
     public Tuple next() {
         while(true) {
             if(currentSlotIndex >= this.pageManager.getNumSlots(currentPage)) {
-                if(currentPageId >= tableStartPageId + TABLE_PAGE_LIMIT - 1) {
+                if(currentPageId > tableStartPageId + TABLE_PAGE_LIMIT - 1) {
                     return null;
                 }
 

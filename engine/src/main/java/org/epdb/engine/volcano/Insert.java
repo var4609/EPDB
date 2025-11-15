@@ -41,7 +41,7 @@ public class Insert implements Operator {
         this.isExecuted = true;
         var serializedTuple = serializeTuple(this.tupleToInsert);
 
-        for(var currentPageId = this.tableStartPageId; currentPageId < 2; currentPageId++) {
+        for(var currentPageId = this.tableStartPageId; currentPageId < TABLE_PAGE_LIMIT; currentPageId++) {
             var page = bufferManager.getPage(currentPageId);
             var pageData = page.data();
 
@@ -51,6 +51,7 @@ public class Insert implements Operator {
 
             if (currentFreeSpaceOffset + serializedTuple.length <= nextSlotAddress) {
                 PageUtils.writeTupleAndSlot(pageData, serializedTuple, currentNumSlots, currentFreeSpaceOffset);
+                System.out.println(tupleToInsert);
                 // bufferManager.unpinPage(currentPageId, true);
                 return this.tupleToInsert;
             } else {
@@ -60,6 +61,7 @@ public class Insert implements Operator {
 
         var page = this.bufferManager.allocateNewPage(0);
         PageUtils.writeTupleAndSlot(page.data(), serializedTuple, 0, HEADER_SIZE_IN_BYTES);
+        System.out.println(tupleToInsert);
         return this.tupleToInsert;
     }
 

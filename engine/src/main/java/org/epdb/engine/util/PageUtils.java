@@ -30,15 +30,15 @@ public class PageUtils {
         byteBuffer.putInt(tupleLength);
     }
 
-    public static void incrementTupleCounter(int currentNumSlots, ByteBuffer byteBuffer) {
+    private static void incrementTupleCounter(int currentNumSlots, ByteBuffer byteBuffer) {
         byteBuffer.putInt(HEADER_NUM_ROWS_ADDR, currentNumSlots + 1);
     }
 
-    public static void incrementFreeSpaceOffset(int newFreeSpaceOffset, ByteBuffer byteBuffer) {
+    private static void incrementFreeSpaceOffset(int newFreeSpaceOffset, ByteBuffer byteBuffer) {
         byteBuffer.putInt(HEADER_FREE_SPACE_OFFSET_ADDR, newFreeSpaceOffset);
     }
 
-    public static void writeTuple(byte[] serializedTuple, int newTupleOffset, ByteBuffer byteBuffer) {
+    private static void writeTuple(byte[] serializedTuple, int newTupleOffset, ByteBuffer byteBuffer) {
         byteBuffer.position(newTupleOffset);
         byteBuffer.put(serializedTuple);
     }
