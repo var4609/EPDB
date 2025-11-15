@@ -20,13 +20,7 @@ public record InMemoryBufferManager(
         } else {
             final var page = this.storageManager.readPage(pageId);
             if (this.bufferFrames.size() >= this.bufferSize) {
-                var victimKey = Collections.min(this.bufferFrames.keySet());
-
-                if (this.bufferFrames.get(victimKey).isDirty()) {
-                    flushPage(this.bufferFrames.get(victimKey).page());
-                }
-
-                this.bufferFrames.remove(victimKey);
+                removeUnusedPage();
             }
             this.bufferFrames.put(pageId, new BufferFrame(page, false));
             return page;
@@ -36,5 +30,20 @@ public record InMemoryBufferManager(
     @Override
     public void flushPage(Page page) {
         this.storageManager.writePage(page.pageId(), page.data());
+    }
+
+    @Override
+    public Page allocateNewPage(int tableId) {
+        var newPageId = this.storageManager.allocateNewPage();
+        return getPage(newPageId);
+    }
+
+    private void removeUnusedPage() {
+        var victimKey = Collections.min(this.bufferFrames.keySet());
+        if (this.bufferFrames.get(victimKey).isDirty()) {
+            flushPage(this.bufferFrames.get(victimKey).page());
+        }
+
+        this.bufferFrames.remove(victimKey);
     }
 }

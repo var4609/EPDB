@@ -81,11 +81,11 @@ public class Database {
         }
 
         var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
-        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(102));
+        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(590));
         var filterOperator = new Selection(predicate, scanOperator);
         var projectionOperator = new Projection(filterOperator, Set.of(0, 1));
 
-        System.out.println("\n--- Query Execution: SELECT id, name FROM users WHERE id > 150 ---");
+        System.out.println("\n--- Query Execution: SELECT id, name FROM users WHERE id > 590 ---");
         System.out.println(Arrays.toString(schema.columnNames()));
         System.out.println("---------------------------------------------");
 
@@ -113,7 +113,7 @@ public class Database {
 
     public void populateTestData() {
         System.out.println("\n--- Admin: Populating Test Data Directly to Storage ---");
-        var rowCount = 50;
+        var rowCount = 500;
 
         for(var i=0; i<rowCount; i++) {
             var id = new IntValue(i + 100);
