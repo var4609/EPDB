@@ -3,7 +3,7 @@
 
 [versions]
 junit = "4.13.2"
-mockito = "5.+"
+mockito = "5.5.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }

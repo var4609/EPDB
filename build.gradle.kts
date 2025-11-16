@@ -1,5 +1,6 @@
 plugins {
     java
+    id("jacoco-report-aggregation")
 }
 
 allprojects {
@@ -8,14 +9,25 @@ allprojects {
     }
 }
 
-tasks.register("release") {
-    group = "Release"
-    description = "Runs release tasks in every subproject"
+subprojects.forEach {
+    dependencies {
+        jacocoAggregation(project(it.path))
+    }
 }
 
-subprojects {
-    rootProject.tasks.named("release") {
-        dependsOn(tasks.named("clean"))
-        dependsOn(tasks.named("build"))
+tasks.register("release") {
+    group = "Release"
+    description = "Cleans and runs tests across subprojects"
+
+    dependsOn(subprojects.flatMap { project ->
+        listOf(project.tasks.named("clean"), project.tasks.named("test"))
+    })
+}
+
+tasks.withType<Test>().configureEach {
+    maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
+    testLogging {
+        showStandardStreams =  true
+        events("failed", "skipped", "passed")
     }
 }
