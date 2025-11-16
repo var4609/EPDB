@@ -19,14 +19,16 @@ public class Insert implements Operator {
     private final BufferManager bufferManager;
     private final Tuple tupleToInsert;
     private final Long tableStartPageId;
+    private final int maxAllocatedPageCount;
 
     private boolean isExecuted;
 
-    public Insert(final BufferManager bufferManager, final Tuple tupleToInsert, Long tableStartPageId) {
+    public Insert(final BufferManager bufferManager, final Tuple tupleToInsert, final int maxAllocatedPageCount, Long tableStartPageId) {
         this.bufferManager = bufferManager;
         this.tupleToInsert = tupleToInsert;
         this.isExecuted = false;
         this.tableStartPageId = tableStartPageId;
+        this.maxAllocatedPageCount = maxAllocatedPageCount;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class Insert implements Operator {
         this.isExecuted = true;
         var serializedTuple = serializeTuple(this.tupleToInsert);
 
-        for(var currentPageId = this.tableStartPageId; currentPageId < TABLE_PAGE_LIMIT; currentPageId++) {
+        for(var currentPageId = this.tableStartPageId; currentPageId <= this.maxAllocatedPageCount; currentPageId++) {
             var page = bufferManager.getPage(currentPageId);
             var pageData = page.data();
 

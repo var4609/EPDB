@@ -36,7 +36,8 @@ public class Database {
             return;
         }
 
-        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
+        var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
+        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount);
 
         System.out.println("\n--- Query Execution: SELECT * FROM users ---");
         System.out.println(Arrays.toString(schema.columnNames()));
@@ -57,7 +58,8 @@ public class Database {
             return;
         }
 
-        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
+        var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
+        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount);
         var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(102));
         var filterOperator = new Selection(predicate, scanOperator);
 
@@ -80,12 +82,13 @@ public class Database {
             return;
         }
 
-        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE);
-        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(590));
+        var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
+        var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount);
+        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(5090));
         var filterOperator = new Selection(predicate, scanOperator);
         var projectionOperator = new Projection(filterOperator, Set.of(0, 1));
 
-        System.out.println("\n--- Query Execution: SELECT id, name FROM users WHERE id > 590 ---");
+        System.out.println("\n--- Query Execution: SELECT id, name FROM users WHERE id > 5090 ---");
         System.out.println(Arrays.toString(schema.columnNames()));
         System.out.println("---------------------------------------------");
 
@@ -100,9 +103,12 @@ public class Database {
 
     public void executeInsert(Tuple tupleToInsert) {
 
+        var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
+
         Insert insertOperator = new Insert(
                 bufferManager,
                 tupleToInsert,
+                tablePageCount,
                 USERS_TABLE_START_PAGE
         );
 
@@ -113,7 +119,7 @@ public class Database {
 
     public void populateTestData() {
         System.out.println("\n--- Admin: Populating Test Data Directly to Storage ---");
-        var rowCount = 500;
+        var rowCount = 5000;
 
         for(var i=0; i<rowCount; i++) {
             var id = new IntValue(i + 100);
