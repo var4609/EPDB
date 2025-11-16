@@ -55,6 +55,14 @@ public class InMemoryStorageManager implements StorageManager {
     }
 
     /**
+     * Standing utility for upstream classes to get page size dynamically.
+     * @return current number of allocated pages.
+     */
+    public int getAllocatedPageCount() {
+        return this.inMemoryStorage.size();
+    }
+
+    /**
      * Create a fresh page byte array with the appropriate header initialized.
      */
     byte[] createEmptyPageData() {

@@ -5,26 +5,26 @@ import org.epdb.engine.dto.*;
 import org.epdb.storage.dto.Page;
 import org.epdb.storage.pagemanager.PageManager;
 
-import static org.epdb.storage.pagemanager.PageConstants.TABLE_PAGE_LIMIT;
-
 public class TableScan implements Operator {
 
     private final BufferManager bufferManager;
     private final Schema schema;
     private final Long tableStartPageId;
     private final PageManager pageManager;
+    private final int maxAllocatedPageId;
 
     private int currentSlotIndex;
     private Long currentPageId;
     private Page currentPage;
 
-    public TableScan(BufferManager bufferManager, Schema schema, Long tableStartPageId) {
+    public TableScan(BufferManager bufferManager, Schema schema, Long tableStartPageId, int maxAllocatedPageId) {
         this.bufferManager = bufferManager;
         this.schema = schema;
         this.tableStartPageId = tableStartPageId;
         this.currentPage = null;
         this.currentSlotIndex = 0;
         this.pageManager = new PageManager();
+        this.maxAllocatedPageId = maxAllocatedPageId;
     }
 
     @Override
@@ -37,14 +37,10 @@ public class TableScan implements Operator {
 
     @Override
     public Tuple next() {
-        while(true) {
+        while(currentPageId <= this.maxAllocatedPageId) {
             if(currentSlotIndex >= this.pageManager.getNumSlots(currentPage)) {
-                if(currentPageId > tableStartPageId + TABLE_PAGE_LIMIT - 1) {
-                    return null;
-                }
-
-                currentPage = bufferManager.getPage(currentPageId);
                 currentPageId += 1;
+                currentPage = bufferManager.getPage(currentPageId);
                 currentSlotIndex = 0;
                 continue;
             }
@@ -67,6 +63,8 @@ public class TableScan implements Operator {
             this.currentSlotIndex++;
             return new Tuple(values);
         }
+
+        return null;
     }
 
     @Override

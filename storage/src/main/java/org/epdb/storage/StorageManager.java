@@ -9,4 +9,6 @@ public interface StorageManager {
     void writePage(Long pageId, byte[] data);
 
     Long allocateNewPage();
+
+    int getAllocatedPageCount();
 }
