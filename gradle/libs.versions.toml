@@ -4,7 +4,9 @@
 [versions]
 junit = "4.13.2"
 mockito = "5.+"
+jacoco = "0.8.14"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+jacoco = { group = "jacoco", name = "jacoco", version.ref = "jacoco" }
