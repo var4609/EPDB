@@ -1,7 +1,6 @@
 plugins {
-    java
-    jacoco
     application
+    id("java-conventions")
 }
 
 dependencies {
@@ -10,10 +9,6 @@ dependencies {
     implementation(project(":storage"))
 }
 
-jacoco {
-    toolVersion = "0.8.14" // Use a recent version
-}
-
 application {
-    mainClass.set("org.epdb.app.Main")
+    mainClass = "org.epdb.app.Main"
 }
