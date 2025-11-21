@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.epdb.buffer.dto.BufferFrame;
-import org.epdb.storage.StorageManager;
+import org.epdb.storage.manager.StorageManager;
 import org.epdb.storage.dto.Page;
 
 public class InMemoryBufferManagerTest {
@@ -46,7 +46,7 @@ public class InMemoryBufferManagerTest {
     public void flushPage_writesToStorage() {
         bufferManager.flushPage(PAGE);
 
-        verify(storageManager, times(1)).writePage(1L, PAGE.data());
+        verify(storageManager, times(1)).writePage(1L, PAGE.getData());
     }
 
     @Test
@@ -59,6 +59,6 @@ public class InMemoryBufferManagerTest {
 
         bufferManager.getPage(10L);
 
-        verify(storageManager, atLeastOnce()).writePage(PAGE.pageId(), PAGE.data());
+        verify(storageManager, atLeastOnce()).writePage(PAGE.getPageId(), PAGE.getData());
     }
 }

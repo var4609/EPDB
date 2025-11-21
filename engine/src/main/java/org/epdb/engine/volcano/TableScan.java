@@ -3,14 +3,12 @@ package org.epdb.engine.volcano;
 import org.epdb.buffer.BufferManager;
 import org.epdb.engine.dto.*;
 import org.epdb.storage.dto.Page;
-import org.epdb.storage.pagemanager.PageManager;
 
 public class TableScan implements Operator {
 
     private final BufferManager bufferManager;
     private final Schema schema;
     private final Long tableStartPageId;
-    private final PageManager pageManager;
     private final int maxAllocatedPageId;
 
     private int currentSlotIndex;
@@ -23,7 +21,6 @@ public class TableScan implements Operator {
         this.tableStartPageId = tableStartPageId;
         this.currentPage = null;
         this.currentSlotIndex = 0;
-        this.pageManager = new PageManager();
         this.maxAllocatedPageId = maxAllocatedPageId;
     }
 
@@ -38,14 +35,14 @@ public class TableScan implements Operator {
     @Override
     public Tuple next() {
         while(currentPageId <= this.maxAllocatedPageId) {
-            if(currentSlotIndex >= this.pageManager.getNumSlots(currentPage)) {
+            if(currentSlotIndex >= currentPage.getCurrentNumSlots()) {
                 currentPageId += 1;
                 currentPage = bufferManager.getPage(currentPageId);
                 currentSlotIndex = 0;
                 continue;
             }
 
-            var recordBytes = pageManager.getTupleFromSlotAt(currentPage, currentSlotIndex);
+            var recordBytes = currentPage.getTuple(currentSlotIndex);
             ColumnValue[] values = new ColumnValue[schema.getColumnCount()];
             try {
                 values[0] = new IntValue(recordBytes.getInt()); // id

@@ -11,7 +11,7 @@ import org.epdb.engine.volcano.Insert;
 import org.epdb.engine.volcano.Projection;
 import org.epdb.engine.volcano.Selection;
 import org.epdb.engine.volcano.TableScan;
-import org.epdb.storage.StorageManager;
+import org.epdb.storage.manager.StorageManager;
 
 public class Database {
 
@@ -24,9 +24,9 @@ public class Database {
     public Database(BufferManager bufferManager, StorageManager storageManager) {
         this.storageManager = storageManager;
         this.bufferManager = bufferManager;
-        this.storageManager.allocateNewPage();
-        this.storageManager.allocateNewPage();
-        this.storageManager.allocateNewPage();
+        this.storageManager.allocatePage();
+        this.storageManager.allocatePage();
+        this.storageManager.allocatePage();
         this.schema = new Schema(new String[]{"id", "name", "age"});
     }
 

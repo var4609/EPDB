@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.epdb.buffer.dto.BufferFrame;
-import org.epdb.storage.StorageManager;
 import org.epdb.storage.dto.Page;
+import org.epdb.storage.manager.StorageManager;
 
 public record InMemoryBufferManager(
         StorageManager storageManager,
@@ -29,12 +29,12 @@ public record InMemoryBufferManager(
 
     @Override
     public void flushPage(Page page) {
-        this.storageManager.writePage(page.pageId(), page.data());
+        this.storageManager.writePage(page.getPageId(), page.getData());
     }
 
     @Override
     public Page allocateNewPage(int tableId) {
-        var newPageId = this.storageManager.allocateNewPage();
+        var newPageId = this.storageManager.allocatePage();
         return getPage(newPageId);
     }
 
