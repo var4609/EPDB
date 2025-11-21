@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.epdb.buffer.dto.BufferFrame;
 import org.epdb.storage.dto.Page;
-import org.epdb.storage.manager.StorageManagerKotlin;
+import org.epdb.storage.manager.StorageManager;
 
 public record InMemoryBufferManager(
-        StorageManagerKotlin storageManager,
+        StorageManager storageManager,
         int bufferSize,
         Map<Long, BufferFrame> bufferFrames
 ) implements BufferManager {
@@ -29,7 +29,7 @@ public record InMemoryBufferManager(
 
     @Override
     public void flushPage(Page page) {
-        this.storageManager.writePage(page.pageId(), page.data());
+        this.storageManager.writePage(page.getPageId(), page.getData());
     }
 
     @Override

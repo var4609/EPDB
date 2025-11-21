@@ -1,6 +1,9 @@
 package org.epdb.storage.util
 
-import org.epdb.storage.pagemanager.PageConstants.*
+import org.epdb.storage.util.PageConstants.HEADER_FREE_SPACE_OFFSET_ADDR
+import org.epdb.storage.util.PageConstants.HEADER_NEXT_PAGE_ID_ADDR
+import org.epdb.storage.util.PageConstants.HEADER_NUM_ROWS_ADDR
+import org.epdb.storage.util.PageConstants.NO_NEXT_PAGE
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

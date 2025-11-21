@@ -2,7 +2,7 @@ package org.epdb.storage.manager
 
 import org.epdb.storage.dto.Page
 
-interface StorageManagerKotlin {
+interface StorageManager {
 
     fun readPage(pageId: Long): Page
 

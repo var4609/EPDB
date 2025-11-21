@@ -5,18 +5,18 @@ import org.epdb.storage.dto.Page;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import static org.epdb.storage.pagemanager.PageConstants.*;
+import static org.epdb.storage.util.PageConstants.*;
 
 public class PageManager {
 
     public int getNumSlots(final Page page) {
-        final ByteBuffer byteBuffer = ByteBuffer.wrap(page.data());
+        final ByteBuffer byteBuffer = ByteBuffer.wrap(page.getData());
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         return byteBuffer.getInt(HEADER_NUM_ROWS_ADDR);
     }
 
     public ByteBuffer getTupleFromSlotAt(Page page, int slotIndex) {
-        final ByteBuffer byteBuffer = ByteBuffer.wrap(page.data()).duplicate();
+        final ByteBuffer byteBuffer = ByteBuffer.wrap(page.getData()).duplicate();
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
         var slotLocation = PAGE_SIZE_IN_BYTES - ((slotIndex + 1) * SLOT_SIZE_IN_BYTES);

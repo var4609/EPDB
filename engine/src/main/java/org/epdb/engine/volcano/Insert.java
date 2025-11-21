@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-import static org.epdb.storage.pagemanager.PageConstants.*;
+import static org.epdb.storage.util.PageConstants.*;
 
 public class Insert implements Operator {
 
@@ -45,7 +45,7 @@ public class Insert implements Operator {
 
         for(var currentPageId = this.tableStartPageId; currentPageId <= this.maxAllocatedPageCount; currentPageId++) {
             var page = bufferManager.getPage(currentPageId);
-            var pageData = page.data();
+            var pageData = page.getData();
 
             var currentFreeSpaceOffset = PageUtils.readFreeSpaceOffset(pageData);
             var currentNumSlots = PageUtils.readNumSlots(pageData);
@@ -62,7 +62,7 @@ public class Insert implements Operator {
         }
 
         var page = this.bufferManager.allocateNewPage(0);
-        PageUtils.writeTupleAndSlot(page.data(), serializedTuple, 0, HEADER_SIZE_IN_BYTES);
+        PageUtils.writeTupleAndSlot(page.getData(), serializedTuple, 0, HEADER_SIZE_IN_BYTES);
         System.out.println(tupleToInsert);
         return this.tupleToInsert;
     }

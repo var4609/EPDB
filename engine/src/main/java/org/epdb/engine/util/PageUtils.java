@@ -3,7 +3,7 @@ package org.epdb.engine.util;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import static org.epdb.storage.pagemanager.PageConstants.*;
+import static org.epdb.storage.util.PageConstants.*;
 
 public class PageUtils {
 

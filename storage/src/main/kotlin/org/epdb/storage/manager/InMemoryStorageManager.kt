@@ -1,15 +1,15 @@
 package org.epdb.storage.manager
 
 import org.epdb.storage.dto.Page
-import org.epdb.storage.pagemanager.PageConstants.HEADER_SIZE_IN_BYTES
-import org.epdb.storage.pagemanager.PageConstants.NO_NEXT_PAGE
+import org.epdb.storage.util.PageConstants.HEADER_SIZE_IN_BYTES
+import org.epdb.storage.util.PageConstants.NO_NEXT_PAGE
 import org.epdb.storage.util.initializePageWithHeader
 import java.nio.ByteBuffer
 
-class InMemoryStorageManagerKotlin(
+class InMemoryStorageManager(
     private val inMemoryStorage: MutableMap<Long, ByteArray> = mutableMapOf(),
     private var nextPageId: Long = NEXT_PAGE_ID
-): StorageManagerKotlin {
+): StorageManager {
 
     companion object {
         const val PAGE_SIZE: Int = 4096
@@ -19,9 +19,9 @@ class InMemoryStorageManagerKotlin(
     override fun readPage(pageId: Long): Page {
         return if (!inMemoryStorage.contains(pageId)) {
             val newPageId = allocatePage()
-            Page(newPageId, inMemoryStorage[newPageId])
+            Page(newPageId, inMemoryStorage[newPageId]!!)
         } else {
-            val pageData = this.inMemoryStorage[pageId]
+            val pageData = this.inMemoryStorage[pageId]!!
             println("Reading page with ID $pageId")
             Page(pageId, pageData)
         }

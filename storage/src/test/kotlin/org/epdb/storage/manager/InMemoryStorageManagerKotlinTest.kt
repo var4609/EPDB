@@ -1,7 +1,11 @@
 package org.epdb.storage.manager
 
 import io.kotest.matchers.shouldBe
-import org.epdb.storage.pagemanager.PageConstants.*
+import org.epdb.storage.util.PageConstants.HEADER_FREE_SPACE_OFFSET_ADDR
+import org.epdb.storage.util.PageConstants.HEADER_NEXT_PAGE_ID_ADDR
+import org.epdb.storage.util.PageConstants.HEADER_NUM_ROWS_ADDR
+import org.epdb.storage.util.PageConstants.HEADER_SIZE_IN_BYTES
+import org.epdb.storage.util.PageConstants.NO_NEXT_PAGE
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.test.BeforeTest
@@ -16,11 +20,11 @@ class InMemoryStorageManagerKotlinTest {
 
     private val inMemoryStorage: MutableMap<Long, ByteArray> = mutableMapOf()
     private val nextPageId: Long = 0L
-    private lateinit var inMemoryStorageManager: InMemoryStorageManagerKotlin
+    private lateinit var inMemoryStorageManager: InMemoryStorageManager
 
     @BeforeTest
     fun setUp() {
-        inMemoryStorageManager = InMemoryStorageManagerKotlin(inMemoryStorage, nextPageId)
+        inMemoryStorageManager = InMemoryStorageManager(inMemoryStorage, nextPageId)
     }
 
     @Test
