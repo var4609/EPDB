@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.epdb.buffer.dto.BufferFrame;
-import org.epdb.storage.StorageManager;
+import org.epdb.storage.manager.StorageManagerKotlin;
 import org.epdb.storage.dto.Page;
 
 public class InMemoryBufferManagerTest {
@@ -20,7 +20,7 @@ public class InMemoryBufferManagerTest {
     private static final Page PAGE = new Page(1L, new byte[] {1,2,3});
     private static final Map<Long, BufferFrame> MAP_WITH_SINGLE_FRAME = new HashMap<>();
 
-    private final StorageManager storageManager = mock();
+    private final StorageManagerKotlin storageManager = mock();
     private final Map<Long, BufferFrame> bufferFrames = mock();
 
     private InMemoryBufferManager bufferManager;

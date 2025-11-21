@@ -11,22 +11,22 @@ import org.epdb.engine.volcano.Insert;
 import org.epdb.engine.volcano.Projection;
 import org.epdb.engine.volcano.Selection;
 import org.epdb.engine.volcano.TableScan;
-import org.epdb.storage.StorageManager;
+import org.epdb.storage.manager.StorageManagerKotlin;
 
 public class Database {
 
     private static final Long USERS_TABLE_START_PAGE = 0L;
 
     private final BufferManager bufferManager;
-    private final StorageManager storageManager;
+    private final StorageManagerKotlin storageManager;
     private final Schema schema;
 
-    public Database(BufferManager bufferManager, StorageManager storageManager) {
+    public Database(BufferManager bufferManager, StorageManagerKotlin storageManager) {
         this.storageManager = storageManager;
         this.bufferManager = bufferManager;
-        this.storageManager.allocateNewPage();
-        this.storageManager.allocateNewPage();
-        this.storageManager.allocateNewPage();
+        this.storageManager.allocatePage();
+        this.storageManager.allocatePage();
+        this.storageManager.allocatePage();
         this.schema = new Schema(new String[]{"id", "name", "age"});
     }
 
