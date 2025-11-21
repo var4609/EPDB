@@ -13,7 +13,7 @@ public class Main {
         System.out.println("*************************************************");
         
         var storageManager = new InMemoryStorageManager();
-        var bufferManager = new InMemoryBufferManager(storageManager, 10, new HashMap<>());
+        var bufferManager = new InMemoryBufferManager(storageManager, 50, new HashMap<>());
         var db = new Database(bufferManager,  storageManager);
         db.populateTestData();
 //        db.executeSelectQuery("users");

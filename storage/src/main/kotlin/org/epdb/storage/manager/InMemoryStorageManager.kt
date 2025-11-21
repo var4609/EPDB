@@ -1,8 +1,8 @@
 package org.epdb.storage.manager
 
 import org.epdb.storage.dto.Page
-import org.epdb.storage.util.PageConstants.HEADER_SIZE_IN_BYTES
-import org.epdb.storage.util.PageConstants.NO_NEXT_PAGE
+import org.epdb.storage.dto.Page.Companion.HEADER_SIZE_IN_BYTES
+import org.epdb.storage.dto.Page.Companion.NO_NEXT_PAGE
 import org.epdb.storage.util.initializePageWithHeader
 import java.nio.ByteBuffer
 
@@ -41,7 +41,7 @@ class InMemoryStorageManager(
 
         return this.nextPageId.also { allocatedId ->
             inMemoryStorage[allocatedId] = data
-            this.nextPageId.inc()
+            this.nextPageId += 1
         }
     }
 

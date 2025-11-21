@@ -1,11 +1,11 @@
 package org.epdb.storage.manager
 
 import io.kotest.matchers.shouldBe
-import org.epdb.storage.util.PageConstants.HEADER_FREE_SPACE_OFFSET_ADDR
-import org.epdb.storage.util.PageConstants.HEADER_NEXT_PAGE_ID_ADDR
-import org.epdb.storage.util.PageConstants.HEADER_NUM_ROWS_ADDR
-import org.epdb.storage.util.PageConstants.HEADER_SIZE_IN_BYTES
-import org.epdb.storage.util.PageConstants.NO_NEXT_PAGE
+import org.epdb.storage.dto.Page.Companion.HEADER_FREE_SPACE_OFFSET_ADDR
+import org.epdb.storage.dto.Page.Companion.HEADER_NEXT_PAGE_ID_ADDR
+import org.epdb.storage.dto.Page.Companion.HEADER_NUM_ROWS_ADDR
+import org.epdb.storage.dto.Page.Companion.HEADER_SIZE_IN_BYTES
+import org.epdb.storage.dto.Page.Companion.NO_NEXT_PAGE
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.test.BeforeTest

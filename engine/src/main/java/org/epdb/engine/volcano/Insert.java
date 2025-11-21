@@ -4,13 +4,12 @@ import org.epdb.buffer.BufferManager;
 import org.epdb.engine.dto.IntValue;
 import org.epdb.engine.dto.StringValue;
 import org.epdb.engine.dto.Tuple;
-import org.epdb.engine.util.PageUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-import static org.epdb.storage.util.PageConstants.*;
+import static org.epdb.storage.dto.Page.*;
 
 public class Insert implements Operator {
 
@@ -45,14 +44,13 @@ public class Insert implements Operator {
 
         for(var currentPageId = this.tableStartPageId; currentPageId <= this.maxAllocatedPageCount; currentPageId++) {
             var page = bufferManager.getPage(currentPageId);
-            var pageData = page.getData();
 
-            var currentFreeSpaceOffset = PageUtils.readFreeSpaceOffset(pageData);
-            var currentNumSlots = PageUtils.readNumSlots(pageData);
+            var currentFreeSpaceOffset = page.getFreeSpaceOffset();
+            var currentNumSlots = page.getCurrentNumSlots();
             var nextSlotAddress = PAGE_SIZE_IN_BYTES - ((currentNumSlots + 1) * SLOT_SIZE_IN_BYTES);
 
-            if (currentFreeSpaceOffset + serializedTuple.length <= nextSlotAddress) {
-                PageUtils.writeTupleAndSlot(pageData, serializedTuple, currentNumSlots, currentFreeSpaceOffset);
+            if (currentFreeSpaceOffset + serializedTuple.length < nextSlotAddress) {
+                page.writeTupleAndSlot(serializedTuple);
                 System.out.println(tupleToInsert);
                 // bufferManager.unpinPage(currentPageId, true);
                 return this.tupleToInsert;
@@ -62,7 +60,7 @@ public class Insert implements Operator {
         }
 
         var page = this.bufferManager.allocateNewPage(0);
-        PageUtils.writeTupleAndSlot(page.getData(), serializedTuple, 0, HEADER_SIZE_IN_BYTES);
+        page.writeTupleAndSlot(serializedTuple);
         System.out.println(tupleToInsert);
         return this.tupleToInsert;
     }
