@@ -16,20 +16,50 @@ public record InMemoryBufferManager(
     @Override
     public Page getPage(Long pageId) {
         if (this.bufferFrames.containsKey(pageId)) {
-            return this.bufferFrames.get(pageId).page();
-        } else {
-            final var page = this.storageManager.readPage(pageId);
-            if (this.bufferFrames.size() >= this.bufferSize) {
-                removeUnusedPage();
-            }
-            this.bufferFrames.put(pageId, new BufferFrame(page, false));
-            return page;
+            var frame = this.bufferFrames.get(pageId);
+
+            frame.pinCount++;
+            return frame.page;
+        }
+
+        if (this.bufferFrames.size() >= this.bufferSize) {
+            evictPage();
+        }
+
+        final var newPage = this.storageManager.readPage(pageId);
+        final var frame = new BufferFrame(newPage);
+        frame.pinCount++;
+        this.bufferFrames.put(pageId, frame);
+
+        return newPage;
+    }
+
+    @Override
+    public void unpinPage(Long pageId, boolean isModified) {
+        var bufferFrame = this.bufferFrames.get(pageId);
+
+        if (bufferFrame == null) {
+            throw new IllegalArgumentException("Page does not exist.");
+        }
+
+        if (bufferFrame.pinCount <= 0) {
+            System.err.println("Illegal unpin action on page.");
+        }
+
+        bufferFrame.pinCount--;
+
+        if (isModified) {
+            bufferFrame.isDirty = true;
         }
     }
 
     @Override
-    public void flushPage(Page page) {
-        this.storageManager.writePage(page.getPageId(), page.getData());
+    public void flushPage(BufferFrame frame) {
+        if(frame.isDirty) {
+            var page = frame.page;
+            this.storageManager.writePage(page.getPageId(), page.getData());
+            frame.isDirty = false;
+        }
     }
 
     @Override
@@ -38,12 +68,9 @@ public record InMemoryBufferManager(
         return getPage(newPageId);
     }
 
-    private void removeUnusedPage() {
+    private void evictPage() {
         var victimKey = Collections.min(this.bufferFrames.keySet());
-        if (this.bufferFrames.get(victimKey).isDirty()) {
-            flushPage(this.bufferFrames.get(victimKey).page());
-        }
-
+        flushPage(this.bufferFrames.get(victimKey));
         this.bufferFrames.remove(victimKey);
     }
 }
