@@ -52,10 +52,10 @@ public class Insert implements Operator {
             if (currentFreeSpaceOffset + serializedTuple.length < nextSlotAddress) {
                 page.writeTupleAndSlot(serializedTuple);
                 System.out.println(tupleToInsert);
-                // bufferManager.unpinPage(currentPageId, true);
+                bufferManager.unpinPage(currentPageId, true);
                 return this.tupleToInsert;
             } else {
-                // bufferManager.unpinPage(currentPageId, false);
+                bufferManager.unpinPage(currentPageId, false);
             }
         }
 
