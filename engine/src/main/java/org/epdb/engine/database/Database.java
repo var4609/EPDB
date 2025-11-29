@@ -11,17 +11,20 @@ import org.epdb.engine.volcano.Insert;
 import org.epdb.engine.volcano.Projection;
 import org.epdb.engine.volcano.Selection;
 import org.epdb.engine.volcano.TableScan;
+import org.epdb.index.IndexManager;
 import org.epdb.storage.manager.StorageManager;
 
 public class Database {
 
     private static final Long USERS_TABLE_START_PAGE = 0L;
 
+    private final IndexManager indexManager;
     private final BufferManager bufferManager;
     private final StorageManager storageManager;
     private final Schema schema;
 
-    public Database(BufferManager bufferManager, StorageManager storageManager) {
+    public Database(BufferManager bufferManager, StorageManager storageManager, IndexManager indexManager) {
+        this.indexManager = indexManager;
         this.storageManager = storageManager;
         this.bufferManager = bufferManager;
         this.storageManager.allocatePage();
@@ -104,12 +107,12 @@ public class Database {
     public void executeInsert(Tuple tupleToInsert) {
 
         var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
-
         Insert insertOperator = new Insert(
                 bufferManager,
                 tupleToInsert,
                 tablePageCount,
-                USERS_TABLE_START_PAGE
+                USERS_TABLE_START_PAGE,
+                indexManager
         );
 
         insertOperator.open();
