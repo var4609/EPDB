@@ -101,7 +101,7 @@ class PageTest : FunSpec({
 
             page.writeTupleAndSlot(tupleData)
 
-            val retrievedBuffer = page.getTuple(slotIndex = 0)
+            val retrievedBuffer = page.getRecordAsByteBufferBySlotId(slotIndex = 0)
 
             retrievedBuffer.capacity() shouldBe 3
             retrievedBuffer.array() shouldBe tupleData
@@ -115,7 +115,7 @@ class PageTest : FunSpec({
             page.writeTupleAndSlot(tuple1)
             page.writeTupleAndSlot(tuple2)
 
-            val retrievedBuffer = page.getTuple(slotIndex = 1)
+            val retrievedBuffer = page.getRecordAsByteBufferBySlotId(slotIndex = 1)
 
             retrievedBuffer.capacity() shouldBe 4
             retrievedBuffer.array() shouldBe tuple2
@@ -126,7 +126,7 @@ class PageTest : FunSpec({
             page.writeTupleAndSlot(byteArrayOf(1))
 
             shouldThrow<IndexOutOfBoundsException> {
-                page.getTuple(slotIndex = -1)
+                page.getRecordAsByteBufferBySlotId(slotIndex = -1)
             }
         }
 
@@ -135,7 +135,7 @@ class PageTest : FunSpec({
             page.writeTupleAndSlot(byteArrayOf(1))
 
             shouldThrow<IndexOutOfBoundsException> {
-                page.getTuple(slotIndex = 1)
+                page.getRecordAsByteBufferBySlotId(slotIndex = 1)
             }
         }
     }

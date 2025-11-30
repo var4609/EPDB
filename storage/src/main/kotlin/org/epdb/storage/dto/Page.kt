@@ -27,7 +27,7 @@ class Page(val pageId: Long, val data: ByteArray) {
     val freeSpaceOffset: Int
         get() = byteBuffer.getInt(HEADER_FREE_SPACE_OFFSET_ADDR)
 
-    fun getTuple(slotIndex: Int): ByteBuffer {
+    fun getRecordAsByteBufferBySlotId(slotIndex: Int): ByteBuffer {
         if (slotIndex >= currentNumSlots) {
             throw IndexOutOfBoundsException()
         }

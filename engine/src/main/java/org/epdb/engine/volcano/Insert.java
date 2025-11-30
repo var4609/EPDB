@@ -47,9 +47,6 @@ public class Insert implements Operator {
         this.isExecuted = true;
         var serializedTuple = serializeTuple(this.tupleToInsert);
 
-        var key = tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID);
-
-
         for(var currentPageId = this.tableStartPageId; currentPageId <= this.maxAllocatedPageCount; currentPageId++) {
             var page = bufferManager.getPage(currentPageId);
 
@@ -70,6 +67,7 @@ public class Insert implements Operator {
 
         var page = this.bufferManager.allocateNewPage(0);
         page.writeTupleAndSlot(serializedTuple);
+        updateColumnIndex(tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID), 0, page.getPageId());;
         System.out.println(tupleToInsert);
         return this.tupleToInsert;
     }
