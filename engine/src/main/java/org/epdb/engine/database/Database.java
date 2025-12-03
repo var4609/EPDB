@@ -7,21 +7,22 @@ import org.epdb.buffer.BufferManager;
 import org.epdb.engine.comparison.ComparisonPredicate;
 import org.epdb.engine.comparison.Op;
 import org.epdb.engine.dto.*;
-import org.epdb.engine.volcano.Insert;
-import org.epdb.engine.volcano.Projection;
-import org.epdb.engine.volcano.Selection;
-import org.epdb.engine.volcano.TableScan;
+import org.epdb.engine.volcano.*;
+import org.epdb.index.InMemoryIndexManager;
+import org.epdb.index.IndexManager;
 import org.epdb.storage.manager.StorageManager;
 
 public class Database {
 
     private static final Long USERS_TABLE_START_PAGE = 0L;
 
+    private final IndexManager indexManager;
     private final BufferManager bufferManager;
     private final StorageManager storageManager;
     private final Schema schema;
 
-    public Database(BufferManager bufferManager, StorageManager storageManager) {
+    public Database(BufferManager bufferManager, StorageManager storageManager, IndexManager indexManager) {
+        this.indexManager = indexManager;
         this.storageManager = storageManager;
         this.bufferManager = bufferManager;
         this.storageManager.allocatePage();
@@ -84,11 +85,12 @@ public class Database {
 
         var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
         var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount);
-        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(5090));
-        var filterOperator = new Selection(predicate, scanOperator);
+        var indexScanOperator = new IndexScan(bufferManager, indexManager, schema, new IntValue(5099));
+        var predicate = new ComparisonPredicate(0, Op.EQUALS, new IntValue(5099));
+        var filterOperator = new Selection(predicate, indexScanOperator);
         var projectionOperator = new Projection(filterOperator, Set.of(0, 1));
 
-        System.out.println("\n--- Query Execution: SELECT id, name FROM users WHERE id > 5090 ---");
+        System.out.println("\n--- Query Execution: SELECT id, name FROM users WHERE id = 5099 ---");
         System.out.println(Arrays.toString(schema.columnNames()));
         System.out.println("---------------------------------------------");
 
@@ -104,12 +106,12 @@ public class Database {
     public void executeInsert(Tuple tupleToInsert) {
 
         var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
-
         Insert insertOperator = new Insert(
                 bufferManager,
                 tupleToInsert,
                 tablePageCount,
-                USERS_TABLE_START_PAGE
+                USERS_TABLE_START_PAGE,
+                indexManager
         );
 
         insertOperator.open();

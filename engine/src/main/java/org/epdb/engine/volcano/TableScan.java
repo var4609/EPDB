@@ -42,7 +42,7 @@ public class TableScan implements Operator {
                 continue;
             }
 
-            var recordBytes = currentPage.getTuple(currentSlotIndex);
+            var recordBytes = currentPage.getRecordAsByteBufferBySlotId(currentSlotIndex);
             ColumnValue[] values = new ColumnValue[schema.getColumnCount()];
             try {
                 values[0] = new IntValue(recordBytes.getInt()); // id

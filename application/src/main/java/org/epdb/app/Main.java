@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.epdb.buffer.InMemoryBufferManager;
 import org.epdb.engine.database.Database;
+import org.epdb.index.InMemoryIndexManager;
 import org.epdb.storage.manager.InMemoryStorageManager;
 
 public class Main {
@@ -14,7 +15,8 @@ public class Main {
         
         var storageManager = new InMemoryStorageManager();
         var bufferManager = new InMemoryBufferManager(storageManager, 50, new HashMap<>());
-        var db = new Database(bufferManager,  storageManager);
+        var indexManager = new InMemoryIndexManager();
+        var db = new Database(bufferManager,  storageManager, indexManager);
         db.populateTestData();
 //        db.executeSelectQuery("users");
 //        db.executeSelectQueryWithFilter("users");

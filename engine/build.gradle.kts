@@ -5,4 +5,5 @@ plugins {
 dependencies {
     implementation(project(":buffer"))
     implementation(project(":storage"))
+    implementation(project(":index"))
 }

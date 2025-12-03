@@ -1,9 +1,11 @@
 package org.epdb.engine.volcano;
 
 import org.epdb.buffer.BufferManager;
+import org.epdb.engine.dto.ColumnValue;
 import org.epdb.engine.dto.IntValue;
 import org.epdb.engine.dto.StringValue;
 import org.epdb.engine.dto.Tuple;
+import org.epdb.index.IndexManager;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,7 +16,9 @@ import static org.epdb.storage.dto.Page.*;
 public class Insert implements Operator {
 
     private static final int NAME_SIZE = 20;
+    private static final int INDEXED_COLUMN_ID = 0;
 
+    private final IndexManager indexManager;
     private final BufferManager bufferManager;
     private final Tuple tupleToInsert;
     private final Long tableStartPageId;
@@ -22,7 +26,8 @@ public class Insert implements Operator {
 
     private boolean isExecuted;
 
-    public Insert(final BufferManager bufferManager, final Tuple tupleToInsert, final int maxAllocatedPageCount, Long tableStartPageId) {
+    public Insert(final BufferManager bufferManager, final Tuple tupleToInsert, final int maxAllocatedPageCount, Long tableStartPageId, final IndexManager indexManager) {
+        this.indexManager = indexManager;
         this.bufferManager = bufferManager;
         this.tupleToInsert = tupleToInsert;
         this.isExecuted = false;
@@ -50,6 +55,7 @@ public class Insert implements Operator {
             var nextSlotAddress = PAGE_SIZE_IN_BYTES - ((currentNumSlots + 1) * SLOT_SIZE_IN_BYTES);
 
             if (currentFreeSpaceOffset + serializedTuple.length < nextSlotAddress) {
+                updateColumnIndex(tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID), currentNumSlots, page.getPageId());
                 page.writeTupleAndSlot(serializedTuple);
                 System.out.println(tupleToInsert);
                 bufferManager.unpinPage(currentPageId, true);
@@ -61,12 +67,17 @@ public class Insert implements Operator {
 
         var page = this.bufferManager.allocateNewPage(0);
         page.writeTupleAndSlot(serializedTuple);
+        updateColumnIndex(tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID), 0, page.getPageId());;
         System.out.println(tupleToInsert);
         return this.tupleToInsert;
     }
 
     @Override
     public void close() {}
+
+    private void updateColumnIndex(ColumnValue key, int slotIndex, Long pageId) {
+        indexManager.addEntry(key, pageId, slotIndex);
+    }
 
     private byte[] serializeTuple(Tuple tuple) {
         var id = (IntValue) tuple.getValueAtIndex(0);
