@@ -9,6 +9,7 @@ kotlin {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("io.mockk:mockk:1.14.6")
     testImplementation("org.junit.platform:junit-platform-launcher")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:6.0.1")
