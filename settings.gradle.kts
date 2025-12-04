@@ -5,10 +5,16 @@
  * For more detailed information on multi-project builds, please refer to https://docs.gradle.org/9.2.0/userguide/multi_project_builds.html in the Gradle documentation.
  * This project uses @Incubating APIs which are subject to change.
  */
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 rootProject.name = "EPDB"
-include("application", "engine", "buffer", "index", "storage", "code-coverage")
+include("application", "engine", "buffer", "index", "storage")
+project(":application").projectDir = file("application/")
+project(":engine").projectDir = file("engine/")
+project(":buffer").projectDir = file("buffer/")
+project(":index").projectDir = file("index/")
+project(":storage").projectDir = file("storage/")

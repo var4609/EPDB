@@ -1,6 +1,7 @@
 plugins {
     id("java-conventions")
     kotlin("jvm")
+    alias(libs.plugins.kover) apply false
 }
 
 kotlin {
