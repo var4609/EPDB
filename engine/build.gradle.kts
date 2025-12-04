@@ -1,9 +1,9 @@
 plugins {
-    id("java-conventions")
+    id("kotlin-conventions")
 }
 
 dependencies {
-    implementation(project(":buffer"))
-    implementation(project(":storage"))
-    implementation(project(":index"))
+    implementation(projects.buffer)
+    implementation(projects.storage)
+    implementation(projects.index)
 }

@@ -3,7 +3,7 @@ package org.epdb.app;
 import java.util.HashMap;
 
 import org.epdb.buffer.InMemoryBufferManager;
-import org.epdb.engine.database.Database;
+import org.epdb.engine.queryexecutor.Database;
 import org.epdb.index.InMemoryIndexManager;
 import org.epdb.storage.manager.InMemoryStorageManager;
 
