@@ -1,6 +1,6 @@
 package org.epdb.engine.comparisonoperator
 
-enum class Operator(val symbol: String) : Op {
+enum class ComparisonOperator(val symbol: String) : Op {
     EQUALS("=") {
         override fun apply(comparison: Int): Boolean  = comparison == 0
     },

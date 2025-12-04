@@ -2,11 +2,11 @@ package org.epdb.engine.comparison
 
 import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.dto.Tuple
-import org.epdb.engine.comparisonoperator.Operator
+import org.epdb.engine.comparisonoperator.ComparisonOperator
 
 data class ComparisonPredicate(
     val columnIndex: Int,
-    val operator: Operator,
+    val comparisonOperator: ComparisonOperator,
     val constantValue: ColumnValue
 ) : Predicate {
 
@@ -14,6 +14,6 @@ data class ComparisonPredicate(
         val columnValue = tuple.getValueAtIndex(columnIndex)?: return false
         val comparison = columnValue.comparesTo(constantValue)
 
-        return operator.apply(comparison)
+        return comparisonOperator.apply(comparison)
     }
 }
