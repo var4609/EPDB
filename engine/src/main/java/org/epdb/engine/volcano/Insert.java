@@ -1,9 +1,9 @@
 package org.epdb.engine.volcano;
 
 import org.epdb.buffer.BufferManager;
-import org.epdb.engine.dto.ColumnValue;
-import org.epdb.engine.dto.IntValue;
-import org.epdb.engine.dto.StringValue;
+import org.epdb.engine.columntypes.ColumnValue;
+import org.epdb.engine.columntypes.IntValue;
+import org.epdb.engine.columntypes.StringValue;
 import org.epdb.engine.dto.Tuple;
 import org.epdb.index.IndexManager;
 
@@ -57,7 +57,7 @@ public class Insert implements Operator {
             if (currentFreeSpaceOffset + serializedTuple.length < nextSlotAddress) {
                 updateColumnIndex(tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID), currentNumSlots, page.getPageId());
                 page.writeTupleAndSlot(serializedTuple);
-                System.out.println(tupleToInsert);
+                System.out.println("Inserted tuple: " + tupleToInsert);
                 bufferManager.unpinPage(currentPageId, true);
                 return this.tupleToInsert;
             } else {
@@ -68,7 +68,7 @@ public class Insert implements Operator {
         var page = this.bufferManager.allocateNewPage(0);
         page.writeTupleAndSlot(serializedTuple);
         updateColumnIndex(tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID), 0, page.getPageId());;
-        System.out.println(tupleToInsert);
+        System.out.println("Inserted tuple: " + tupleToInsert);
         return this.tupleToInsert;
     }
 
@@ -82,16 +82,16 @@ public class Insert implements Operator {
     private byte[] serializeTuple(Tuple tuple) {
         var id = (IntValue) tuple.getValueAtIndex(0);
         var name = (StringValue) tuple.getValueAtIndex(1);
-        var nameBytes = name.value().getBytes(StandardCharsets.UTF_8);
+        var nameBytes = name.getValue().getBytes(StandardCharsets.UTF_8);
         var age = (IntValue) tuple.getValueAtIndex(2);
         var byteBuffer = ByteBuffer.allocate(ROW_SIZE_IN_BYTES).order(ByteOrder.LITTLE_ENDIAN);
 
-        byteBuffer.putInt(id.value());
+        byteBuffer.putInt(id.getValue());
         byteBuffer.put(nameBytes, 0, Math.min(nameBytes.length, NAME_SIZE));
         for (int i = nameBytes.length; i < NAME_SIZE; i++) {
             byteBuffer.put((byte) 0);
         }
-        byteBuffer.putInt(age.value());
+        byteBuffer.putInt(age.getValue());
 
         return byteBuffer.array();
     }

@@ -1,8 +1,13 @@
 package org.epdb.engine.volcano;
 
 import org.epdb.buffer.BufferManager;
+import org.epdb.engine.columntypes.ColumnValue;
+import org.epdb.engine.columntypes.IntValue;
+import org.epdb.engine.columntypes.StringValue;
 import org.epdb.engine.dto.*;
 import org.epdb.storage.dto.Page;
+
+import java.util.List;
 
 public class TableScan implements Operator {
 
@@ -58,7 +63,7 @@ public class TableScan implements Operator {
             }
 
             this.currentSlotIndex++;
-            return new Tuple(values);
+            return new Tuple(List.of(values));
         }
 
         return null;

@@ -1,6 +1,9 @@
 package org.epdb.engine.volcano;
 
 import org.epdb.buffer.BufferManager;
+import org.epdb.engine.columntypes.ColumnValue;
+import org.epdb.engine.columntypes.IntValue;
+import org.epdb.engine.columntypes.StringValue;
 import org.epdb.engine.dto.*;
 import org.epdb.index.IndexManager;
 import org.epdb.index.dto.PagePointer;
@@ -54,7 +57,7 @@ public class IndexScan implements Operator {
 
             this.bufferManager.unpinPage(pagePointer.getPageId(), false);
             this.currentPagePointerIndex++;
-            return new Tuple(values);
+            return new Tuple(List.of(values));
         }
 
         return null;

@@ -1,8 +1,9 @@
 package org.epdb.engine.volcano;
 
+import java.util.List;
 import java.util.Set;
 
-import org.epdb.engine.dto.ColumnValue;
+import org.epdb.engine.columntypes.ColumnValue;
 import org.epdb.engine.dto.Tuple;
 
 public record Projection(
@@ -25,13 +26,13 @@ public record Projection(
 
         ColumnValue[] values = new ColumnValue[this.projectionColumns.size()];
         int k = 0;
-        for (var i = 0; i < tuple.values().length; i++) {
+        for (var i = 0; i < tuple.getValues().size(); i++) {
             if (this.projectionColumns.contains(i)) {
                 values[k++] = tuple.getValueAtIndex(i);
             }
         }
 
-        return new Tuple(values);
+        return new Tuple(List.of(values));
     }
 
     @Override

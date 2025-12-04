@@ -1,14 +1,17 @@
 package org.epdb.engine.database;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.epdb.buffer.BufferManager;
+import org.epdb.engine.columntypes.ColumnValue;
+import org.epdb.engine.columntypes.IntValue;
+import org.epdb.engine.columntypes.StringValue;
 import org.epdb.engine.comparison.ComparisonPredicate;
-import org.epdb.engine.comparison.Op;
+import org.epdb.engine.operator.Operator;
 import org.epdb.engine.dto.*;
 import org.epdb.engine.volcano.*;
-import org.epdb.index.InMemoryIndexManager;
 import org.epdb.index.IndexManager;
 import org.epdb.storage.manager.StorageManager;
 
@@ -28,7 +31,7 @@ public class Database {
         this.storageManager.allocatePage();
         this.storageManager.allocatePage();
         this.storageManager.allocatePage();
-        this.schema = new Schema(new String[]{"id", "name", "age"});
+        this.schema = new Schema(List.of("id", "name", "age"));
     }
 
     public void executeSelectQuery(String tableName) {
@@ -41,7 +44,7 @@ public class Database {
         var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount);
 
         System.out.println("\n--- Query Execution: SELECT * FROM users ---");
-        System.out.println(Arrays.toString(schema.columnNames()));
+        System.out.println(schema.getColumnNames());
         System.out.println("---------------------------------------------");
 
         scanOperator.open();
@@ -61,11 +64,11 @@ public class Database {
 
         var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
         var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount);
-        var predicate = new ComparisonPredicate(0, Op.GREATER_THAN, new IntValue(102));
+        var predicate = new ComparisonPredicate(0, Operator.GREATER_THAN, new IntValue(102));
         var filterOperator = new Selection(predicate, scanOperator);
 
         System.out.println("\n--- Query Execution: SELECT * FROM users WHERE id > 150 ---");
-        System.out.println(Arrays.toString(schema.columnNames()));
+        System.out.println(schema.getColumnNames());
         System.out.println("---------------------------------------------");
 
         filterOperator.open();
@@ -86,12 +89,12 @@ public class Database {
         var tablePageCount = this.storageManager.getAllocatedPageCount() - 1;
         var scanOperator = new TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount);
         var indexScanOperator = new IndexScan(bufferManager, indexManager, schema, new IntValue(5099));
-        var predicate = new ComparisonPredicate(0, Op.EQUALS, new IntValue(5099));
+        var predicate = new ComparisonPredicate(0, Operator.EQUALS, new IntValue(5099));
         var filterOperator = new Selection(predicate, indexScanOperator);
         var projectionOperator = new Projection(filterOperator, Set.of(0, 1));
 
         System.out.println("\n--- Query Execution: SELECT id, name FROM users WHERE id = 5099 ---");
-        System.out.println(Arrays.toString(schema.columnNames()));
+        System.out.println(schema.getColumnNames());
         System.out.println("---------------------------------------------");
 
         projectionOperator.open();
@@ -128,7 +131,7 @@ public class Database {
             var name = new StringValue("User_" + i);
             var age = new IntValue(20 + i);
 
-            executeInsert(new Tuple(new ColumnValue[]{id, name, age}));
+            executeInsert(new Tuple(List.of(id, name, age)));
         }
     }
 }
