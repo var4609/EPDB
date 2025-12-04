@@ -1,4 +1,4 @@
-package org.epdb.engine.operator
+package org.epdb.engine.comparisonoperator
 
 enum class Operator(val symbol: String) : Op {
     EQUALS("=") {

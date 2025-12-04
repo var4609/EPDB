@@ -1,4 +1,4 @@
-package org.epdb.engine.operator
+package org.epdb.engine.comparisonoperator
 
 interface Op {
 

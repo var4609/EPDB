@@ -2,7 +2,7 @@ package org.epdb.engine.comparison
 
 import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.dto.Tuple
-import org.epdb.engine.operator.Operator
+import org.epdb.engine.comparisonoperator.Operator
 
 data class ComparisonPredicate(
     val columnIndex: Int,
