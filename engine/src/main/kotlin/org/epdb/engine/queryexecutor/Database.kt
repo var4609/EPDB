@@ -1,22 +1,22 @@
 package org.epdb.engine.queryexecutor
 
 import org.epdb.buffer.BufferManager
-import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.columntypes.IntValue
 import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.comparison.ComparisonPredicate
 import org.epdb.engine.comparisonoperator.Operator
 import org.epdb.engine.databaseoperator.Projection
 import org.epdb.engine.databaseoperator.Selection
+import org.epdb.engine.databaseoperator.TableScan
 import org.epdb.engine.dto.Schema
 import org.epdb.engine.dto.Tuple
-import org.epdb.engine.volcano.*
+import org.epdb.engine.volcano.IndexScan
+import org.epdb.engine.volcano.Insert
 import org.epdb.index.IndexManager
 import org.epdb.storage.manager.StorageManager
-import java.util.List
 
 class Database(
-    private val bufferManager: BufferManager?,
+    private val bufferManager: BufferManager,
     private val storageManager: StorageManager,
     private val indexManager: IndexManager?
 ) {
@@ -31,11 +31,11 @@ class Database(
 
     fun executeSelectQuery(tableName: String) {
         if (tableName != "users") {
-            println("Table not found: " + tableName)
+            println("Table not found: $tableName")
             return
         }
 
-        val tablePageCount = this.storageManager.getAllocatedPageCount() - 1
+        val tablePageCount = this.storageManager.getAllocatedPageCount() - 1L
         val scanOperator = TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount)
 
         println("\n--- Query Execution: SELECT * FROM users ---")
@@ -53,11 +53,11 @@ class Database(
 
     fun executeSelectQueryWithFilter(tableName: String) {
         if (tableName != "users") {
-            println("Table not found: " + tableName)
+            println("Table not found: $tableName")
             return
         }
 
-        val tablePageCount = this.storageManager.getAllocatedPageCount() - 1
+        val tablePageCount = this.storageManager.getAllocatedPageCount() - 1L
         val scanOperator = TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount)
         val predicate = ComparisonPredicate(0, Operator.GREATER_THAN, IntValue(102))
         val filterOperator = Selection(predicate, scanOperator)
@@ -77,11 +77,11 @@ class Database(
 
     fun executeSelectQueryWithFilterAndProjection(tableName: String) {
         if (tableName != "users") {
-            println("Table not found: " + tableName)
+            println("Table not found: $tableName")
             return
         }
 
-        val tablePageCount = this.storageManager.getAllocatedPageCount() - 1
+        val tablePageCount = this.storageManager.getAllocatedPageCount() - 1L
         val scanOperator = TableScan(bufferManager, schema, USERS_TABLE_START_PAGE, tablePageCount)
         val indexScanOperator = IndexScan(bufferManager, indexManager, schema, IntValue(5099))
         val predicate = ComparisonPredicate(0, Operator.EQUALS, IntValue(5099))
@@ -122,10 +122,10 @@ class Database(
 
         for (i in 0..<rowCount) {
             val id = IntValue(i + 100)
-            val name = StringValue("User_" + i)
+            val name = StringValue("User_$i")
             val age = IntValue(20 + i)
 
-            executeInsert(Tuple(List.of<ColumnValue?>(id, name, age)))
+            executeInsert(Tuple(listOf(id, name, age)))
         }
     }
 
