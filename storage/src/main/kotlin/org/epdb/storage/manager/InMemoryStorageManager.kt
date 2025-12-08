@@ -6,8 +6,8 @@ import org.epdb.storage.dto.Page.Companion.NO_NEXT_PAGE
 import org.epdb.storage.util.initializePageWithHeader
 import java.nio.ByteBuffer
 
-class InMemoryStorageManager(
-    private val inMemoryStorage: MutableMap<Long, ByteArray> = mutableMapOf(),
+internal class InMemoryStorageManager(
+    private val storageProvider: MutableMap<Long, ByteArray> = mutableMapOf(),
     private var nextPageId: Long = NEXT_PAGE_ID
 ): StorageManager {
 
@@ -17,11 +17,11 @@ class InMemoryStorageManager(
     }
 
     override fun readPage(pageId: Long): Page {
-        return if (!inMemoryStorage.contains(pageId)) {
+        return if (!storageProvider.contains(pageId)) {
             val newPageId = allocatePage()
-            Page(newPageId, inMemoryStorage[newPageId]!!)
+            Page(newPageId, storageProvider[newPageId]!!)
         } else {
-            val pageData = this.inMemoryStorage[pageId]!!
+            val pageData = this.storageProvider[pageId]!!
             println("Reading page with ID $pageId")
             Page(pageId, pageData)
         }
@@ -30,7 +30,7 @@ class InMemoryStorageManager(
     override fun writePage(pageId: Long, byteArray: ByteArray) {
         return if (byteArray.size < PAGE_SIZE) {
             println("Writing page with ID $pageId")
-            inMemoryStorage[pageId] = byteArray
+            storageProvider[pageId] = byteArray
         } else {
             throw IllegalArgumentException("Data size must be less than $PAGE_SIZE")
         }
@@ -40,12 +40,12 @@ class InMemoryStorageManager(
         val data = createEmptyPageData()
 
         return this.nextPageId.also { allocatedId ->
-            inMemoryStorage[allocatedId] = data
+            storageProvider[allocatedId] = data
             this.nextPageId += 1
         }
     }
 
-    override fun getAllocatedPageCount(): Int = this.inMemoryStorage.size
+    override fun getAllocatedPageCount(): Int = this.storageProvider.size
 
     fun createEmptyPageData(): ByteArray =
         ByteArray(PAGE_SIZE).also {

@@ -7,7 +7,7 @@ import org.epdb.storage.dto.Page.Companion.NO_NEXT_PAGE
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-fun ByteBuffer.initializePageWithHeader(
+internal fun ByteBuffer.initializePageWithHeader(
     freeSpaceOffsetValue: Int,
     numRowsValue: Int = 0,
     nextPageIdValue: Int = NO_NEXT_PAGE

@@ -1,6 +1,6 @@
 package org.epdb.engine.databaseoperator
 
-import org.epdb.buffer.BufferManager
+import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.columntypes.IntValue
 import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.dto.Schema

@@ -1,15 +1,13 @@
-package org.epdb.buffer
+package org.epdb.buffer.manager
 
 import org.epdb.buffer.dto.BufferFrame
 import org.epdb.storage.dto.Page
-import org.epdb.storage.manager.InMemoryStorageManager
 import org.epdb.storage.manager.StorageManager
-import java.util.*
 
-class InMemoryBufferManager(
-    private val storageManager: StorageManager = InMemoryStorageManager(),
-    private val bufferSize: Int = 10,
-    private val bufferFrames: MutableMap<Long, BufferFrame> = mutableMapOf()
+internal class InMemoryBufferManager(
+    private val storageManager: StorageManager,
+    private val bufferSize: Int,
+    private val bufferFrames: MutableMap<Long, BufferFrame>
 ) : BufferManager {
 
     override fun getPage(pageId: Long): Page =

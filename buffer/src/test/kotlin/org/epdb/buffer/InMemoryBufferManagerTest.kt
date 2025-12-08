@@ -10,6 +10,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.epdb.buffer.dto.BufferFrame
+import org.epdb.buffer.manager.InMemoryBufferManager
 import org.epdb.storage.dto.Page
 import org.epdb.storage.manager.StorageManager
 
@@ -94,6 +95,7 @@ class InMemoryBufferManagerTest : BehaviorSpec({
         val page = Page(pageId, ByteArray(4096))
         val bufferFrame = BufferFrame(page, false, 1)
         val bufferManager = InMemoryBufferManager(
+            bufferSize = 10,
             storageManager = mockStorageManager,
             bufferFrames = mutableMapOf(pageId to bufferFrame)
         )
@@ -139,6 +141,7 @@ class InMemoryBufferManagerTest : BehaviorSpec({
     Given("A page is not in the buffer") {
         val pageId = 99L
         val bufferManager = InMemoryBufferManager(
+            bufferSize = 10,
             storageManager = mockStorageManager,
             bufferFrames = mutableMapOf()
         )
@@ -194,6 +197,7 @@ class InMemoryBufferManagerTest : BehaviorSpec({
 
     Given("The buffer manager") {
         val bufferManager = InMemoryBufferManager(
+            bufferSize = 10,
             storageManager = mockStorageManager,
             bufferFrames = mutableMapOf()
         )

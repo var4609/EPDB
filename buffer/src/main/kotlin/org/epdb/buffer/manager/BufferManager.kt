@@ -1,4 +1,4 @@
-package org.epdb.buffer
+package org.epdb.buffer.manager
 
 import org.epdb.buffer.dto.BufferFrame
 import org.epdb.storage.dto.Page
