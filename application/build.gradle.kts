@@ -1,6 +1,6 @@
 plugins {
     application
-    id("java-conventions")
+    id("kotlin-conventions")
 }
 
 dependencies {
@@ -11,5 +11,9 @@ dependencies {
 }
 
 application {
-    mainClass = "org.epdb.app.Main"
+    mainClass = "org.epdb.app.MainKt"
+}
+
+repositories {
+    mavenCentral()
 }
