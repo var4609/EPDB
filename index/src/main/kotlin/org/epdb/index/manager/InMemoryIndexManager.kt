@@ -1,8 +1,8 @@
-package org.epdb.index
+package org.epdb.index.manager
 
 import org.epdb.index.dto.PagePointer
 
-class InMemoryIndexManager(
+internal class InMemoryIndexManager(
     private val indexStore: MutableMap<Any, MutableList<PagePointer>> = mutableMapOf()
 ) : IndexManager {
 

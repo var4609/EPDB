@@ -5,6 +5,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.shouldBe
 import org.epdb.index.dto.PagePointer
+import org.epdb.index.manager.InMemoryIndexManager
 
 class InMemoryIndexManagerTest : BehaviorSpec({
     Given("An empty InMemoryIndexManager") {

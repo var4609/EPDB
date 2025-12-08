@@ -1,25 +1,18 @@
 package org.epdb.app;
 
-import java.util.HashMap;
-
-import org.epdb.buffer.InMemoryBufferManager;
-import org.epdb.engine.queryexecutor.Database;
-import org.epdb.index.InMemoryIndexManager;
-import org.epdb.storage.manager.InMemoryStorageManager;
+import org.epdb.engine.EngineModule;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("*************************************************");
         System.out.println("** Database System Startup (Phase 1: Read Core) **");
         System.out.println("*************************************************");
-        
-        var storageManager = new InMemoryStorageManager();
-        var bufferManager = new InMemoryBufferManager(storageManager, 50, new HashMap<>());
-        var indexManager = new InMemoryIndexManager();
-        var db = new Database(bufferManager,  storageManager, indexManager);
-        db.populateTestData();
-//        db.executeSelectQuery("users");
-//        db.executeSelectQueryWithFilter("users");
-        db.executeSelectQueryWithFilterAndProjection("users");
+
+        var tableName = "users";
+        var db = EngineModule.INSTANCE.getQueryExecutor();
+        db.populateTestData(tableName);
+//      db.executeSelectQuery("users");
+//      db.executeSelectQueryWithFilter("users");
+        db.executeSelectQueryWithFilterAndProjection(tableName);
     }
 }

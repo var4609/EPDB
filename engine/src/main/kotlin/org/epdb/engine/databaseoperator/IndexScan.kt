@@ -1,12 +1,12 @@
 package org.epdb.engine.databaseoperator
 
-import org.epdb.buffer.BufferManager
+import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.columntypes.IntValue
 import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.dto.Schema
 import org.epdb.engine.dto.Tuple
-import org.epdb.index.IndexManager
+import org.epdb.index.manager.IndexManager
 import org.epdb.index.dto.PagePointer
 import java.nio.BufferUnderflowException
 
