@@ -29,7 +29,7 @@ class TableScan(
 
             if (currentPage == null || currentSlotIndex >= currentPage!!.currentNumSlots) {
 
-                if (currentPageId != tableStartPageId) {
+                if (currentPage != null) {
                     bufferManager.unpinPage(currentPageId, false)
                     currentPage = null
                 }

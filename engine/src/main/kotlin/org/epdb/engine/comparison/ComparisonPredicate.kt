@@ -11,7 +11,7 @@ data class ComparisonPredicate(
 ) : Predicate {
 
     override fun evaluate(tuple: Tuple): Boolean {
-        val columnValue = tuple.getValueAtIndex(columnIndex)?: return false
+        val columnValue = tuple.getValueAtIndex(columnIndex)
         val comparison = columnValue.comparesTo(constantValue)
 
         return comparisonOperator.apply(comparison)
