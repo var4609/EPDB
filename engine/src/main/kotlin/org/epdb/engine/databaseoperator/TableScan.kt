@@ -1,10 +1,9 @@
 package org.epdb.engine.databaseoperator
 
 import org.epdb.buffer.manager.BufferManager
-import org.epdb.engine.columntypes.IntValue
-import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.dto.Schema
 import org.epdb.engine.dto.Tuple
+import org.epdb.engine.serialization.RecordDecoder
 import org.epdb.storage.dto.Page
 import java.nio.BufferUnderflowException
 
@@ -44,24 +43,7 @@ class TableScan(
             }
 
             val recordBytes = currentPage!!.getRecordAsByteBufferBySlotId(currentSlotIndex)
-
-            val values = buildList {
-                try {
-                    // TODO: Replace this hardcoded logic with schema-driven deserialization
-                    add(IntValue(recordBytes.getInt())) // id
-
-                    val nameBytes = ByteArray(20)
-                    recordBytes.get(nameBytes)
-                    add(StringValue(String(nameBytes).trim())) // name
-
-                    add(IntValue(recordBytes.getInt())) // age
-                } catch (e: BufferUnderflowException) {
-                    System.err.println("Error reading record at page $currentPageId, slot $currentSlotIndex: Buffer Underflow.")
-                    e.printStackTrace()
-                    currentSlotIndex++
-                    continue
-                }
-            }
+            val values = RecordDecoder.deserialize(recordBytes, schema)
 
             currentSlotIndex++
             return Tuple(values)
