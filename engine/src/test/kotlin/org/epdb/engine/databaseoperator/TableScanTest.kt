@@ -11,6 +11,8 @@ import io.mockk.verify
 import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.columntypes.IntValue
 import org.epdb.engine.dto.Schema
+import org.epdb.engine.dto.ColumnDefinition
+import org.epdb.engine.dto.ColumnType
 import org.epdb.storage.dto.Page
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -19,7 +21,11 @@ class TableScanTest : BehaviorSpec({
 
     val START_PAGE_ID = 100L
     val MAX_PAGE_ID = 100L
-    val MOCK_SCHEMA = Schema(emptyList())
+    val MOCK_SCHEMA = Schema(listOf(
+        ColumnDefinition("id", ColumnType.INT),
+        ColumnDefinition("name", ColumnType.STRING_FIXED_TYPE),
+        ColumnDefinition("age", ColumnType.INT)
+    ))
 
     fun createMockPage(numSlots: Int, recordData: ByteBuffer): Page {
         val page = mockk<Page> {
@@ -35,11 +41,11 @@ class TableScanTest : BehaviorSpec({
         val paddedName = name.padEnd(20, ' ').toByteArray()
         return ByteBuffer
             .allocate(28)
+            .order(ByteOrder.LITTLE_ENDIAN)
             .putInt(id)
             .put(paddedName)
             .putInt(age)
             .position(0)
-            .order(ByteOrder.LITTLE_ENDIAN)
     }
 
     Given("A TableScan over a single page with 2 records") {

@@ -7,6 +7,8 @@ import org.epdb.engine.comparison.Predicate
 import org.epdb.engine.databaseoperator.*
 import org.epdb.engine.dto.Schema
 import org.epdb.engine.dto.Tuple
+import org.epdb.engine.dto.ColumnDefinition
+import org.epdb.engine.dto.ColumnType
 import org.epdb.engine.queryexecutor.Database
 import org.epdb.index.IndexModule
 import org.epdb.index.dto.PagePointer
@@ -18,7 +20,10 @@ object EngineModule {
     private const val USERS_TABLE_START_PAGE = 0L
 
     private val schema : Schema by lazy {
-        Schema(mutableListOf("id", "name", "age"))
+        val idCol = ColumnDefinition("id", ColumnType.INT)
+        val nameCol = ColumnDefinition("name", ColumnType.STRING_FIXED_TYPE)
+        val ageCol = ColumnDefinition("age", ColumnType.INT)
+        Schema(mutableListOf(idCol, nameCol, ageCol))
     }
 
     private val pagePointers : List<PagePointer> by lazy {

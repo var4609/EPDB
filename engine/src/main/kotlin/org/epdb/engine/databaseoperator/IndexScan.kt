@@ -2,10 +2,9 @@ package org.epdb.engine.databaseoperator
 
 import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.columntypes.ColumnValue
-import org.epdb.engine.columntypes.IntValue
-import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.dto.Schema
 import org.epdb.engine.dto.Tuple
+import org.epdb.engine.serialization.RecordDecoder
 import org.epdb.index.manager.IndexManager
 import org.epdb.index.dto.PagePointer
 import java.nio.BufferUnderflowException
@@ -48,25 +47,7 @@ class IndexScan(
 
         return try {
             val recordBytes = page.getRecordAsByteBufferBySlotId(pagePointer.slotIndex)
-
-            val values : List<ColumnValue> = runCatching {
-                buildList {
-                    add(IntValue(recordBytes.getInt()))
-
-                    val nameBytes = ByteArray(20)
-                    recordBytes.get(nameBytes)
-                    add(StringValue(String(nameBytes).trim { it <= ' ' }))
-
-                    add(IntValue(recordBytes.getInt()))
-                }
-            }.getOrElse { error ->
-                if (error is BufferUnderflowException) {
-                    System.err.println("Error reading record at page ${pagePointer.pageId}, slot ${pagePointer.slotIndex}: Buffer Underflow. Skipping record.")
-                    emptyList()
-                } else {
-                    throw error
-                }
-            }
+            val values : List<ColumnValue> = RecordDecoder.deserialize(recordBytes, schema)
 
             if (values.isEmpty()) null else Tuple(values)
         } finally {
