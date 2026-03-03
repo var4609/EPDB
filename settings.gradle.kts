@@ -12,9 +12,10 @@ plugins {
 }
 
 rootProject.name = "EPDB"
-include("application", "engine", "buffer", "index", "storage")
+include("application", "engine", "buffer", "index", "storage", "commons")
 project(":application").projectDir = file("application/")
 project(":engine").projectDir = file("engine/")
 project(":buffer").projectDir = file("buffer/")
 project(":index").projectDir = file("index/")
 project(":storage").projectDir = file("storage/")
+project(":commons").projectDir = file("commons/")

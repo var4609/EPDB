@@ -7,6 +7,7 @@ import org.epdb.engine.comparison.ComparisonPredicate
 import org.epdb.engine.comparisonoperator.ComparisonOperator
 import org.epdb.engine.databaseoperator.Operator
 import org.epdb.engine.dto.Tuple
+import org.epdb.org.epdb.commons.Logger
 import org.epdb.storage.manager.StorageManager
 
 class Database(
@@ -15,7 +16,7 @@ class Database(
 
     init {
         repeat(3) { storageManager.allocatePage() }
-        println("Database initialized and ready.")
+        Logger.info("Database initialized and ready.")
     }
 
     fun executeSelectQuery(tableName: String) {
@@ -63,7 +64,7 @@ class Database(
     }
 
     fun populateTestData(tableName: String) {
-        println("\n--- Admin: Populating Test Data Directly to Storage ---")
+        Logger.info("\n--- Admin: Populating Test Data Directly to Storage ---")
         val rowCount = 5000
 
         for (i in 0..<rowCount) {
@@ -73,27 +74,27 @@ class Database(
 
             executeInsert(tableName, Tuple(listOf(id, name, age)))
         }
-        println("--- Admin: Data population finished. ---")
+        Logger.info("--- Admin: Data population finished. ---")
     }
 
     private fun executeAndPrint(rootOperator: Operator, queryDescription: String) {
-        println("\n--- Query Execution: $queryDescription ---")
-        println(mutableListOf("id", "name", "age"))
-        println("---------------------------------------------")
+        Logger.info("\n--- Query Execution: $queryDescription ---")
+        Logger.info(mutableListOf("id", "name", "age").toString())
+        Logger.info("---------------------------------------------")
 
         rootOperator.use { op ->
             op.open()
             var tuple: Tuple?
 
             while (op.next().also { tuple = it } != null) {
-                println(tuple)
+                Logger.info(tuple.toString())
             }
         }
     }
 
     private fun checkTableName(tableName: String): Boolean {
         if (tableName != "users") {
-            System.err.println("Table not found: $tableName")
+            Logger.error("Table not found: $tableName")
             return false
         }
         return true
