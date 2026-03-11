@@ -6,6 +6,10 @@ repositories {
     mavenCentral()
 }
 
+allprojects {
+    group = "com.epdb"
+}
+
 dependencies {
     kover(projects.application)
     kover(project(":buffer"))

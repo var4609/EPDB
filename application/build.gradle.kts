@@ -18,3 +18,11 @@ application {
 repositories {
     mavenCentral()
 }
+
+sourceSets.main {
+    kotlin.srcDirs("src/main/kotlin/org/epdb/app")
+}
+
+sourceSets.test {
+    kotlin.srcDirs("src/test/kotlin/org/epdb/app")
+}

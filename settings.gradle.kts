@@ -11,7 +11,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "EPDB"
+
 include("application", "engine", "buffer", "index", "storage", "commons")
 project(":application").projectDir = file("application/")
 project(":engine").projectDir = file("engine/")
