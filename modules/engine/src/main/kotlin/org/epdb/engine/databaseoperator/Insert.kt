@@ -6,6 +6,7 @@ import org.epdb.engine.columntypes.IntValue
 import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.dto.Tuple
 import org.epdb.index.manager.IndexManager
+import org.epdb.org.epdb.commons.Logger
 import org.epdb.storage.dto.Page
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -41,7 +42,7 @@ class Insert(
                 if (canInsertTuple(page, serializedTuple.size)) {
                     updateColumnIndex(tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID), page.currentNumSlots, page.pageId)
                     page.writeTupleAndSlot(serializedTuple)
-                    println("Inserted tuple: $tupleToInsert")
+                    Logger.info("Inserted tuple: $tupleToInsert")
                     bufferManager.unpinPage(currentPageId, true)
                     return this.tupleToInsert
                 }
@@ -57,7 +58,7 @@ class Insert(
         try {
             updateColumnIndex(tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID), 0, newPage.pageId)
             newPage.writeTupleAndSlot(serializedTuple)
-            println("Inserted tuple: $tupleToInsert")
+            Logger.info("Inserted tuple: $tupleToInsert")
             return this.tupleToInsert
         } finally {
             bufferManager.unpinPage(newPage.pageId, true)

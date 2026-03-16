@@ -2,6 +2,7 @@ package org.epdb.engine.databaseoperator
 
 import org.epdb.engine.comparison.Predicate
 import org.epdb.engine.dto.Tuple
+import org.epdb.org.epdb.commons.Logger
 
 data class Selection(
     private val predicate: Predicate,
@@ -10,7 +11,7 @@ data class Selection(
 
     override fun open() {
         this.childOperator.open()
-        println("Opened child operator...")
+        Logger.info("Opened child operator...")
     }
 
     override fun next(): Tuple? {
@@ -25,6 +26,6 @@ data class Selection(
 
     override fun close() {
         this.childOperator.close()
-        println("Closed child operator...")
+        Logger.info("Closed child operator...")
     }
 }

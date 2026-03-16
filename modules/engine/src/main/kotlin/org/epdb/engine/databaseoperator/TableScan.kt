@@ -4,6 +4,7 @@ import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.dto.Schema
 import org.epdb.engine.dto.Tuple
 import org.epdb.engine.serialization.RecordDecoder
+import org.epdb.org.epdb.commons.Logger
 import org.epdb.storage.dto.Page
 
 class TableScan(
@@ -19,7 +20,7 @@ class TableScan(
     override fun open() {
         currentPage = bufferManager.getPage(currentPageId)
         currentSlotIndex = 0
-        println("TableScan opened at page ID: $currentPageId")
+        Logger.info("TableScan opened at page ID: $currentPageId")
     }
 
     override fun next(): Tuple? {
@@ -58,6 +59,6 @@ class TableScan(
 
         currentPage = null
         currentSlotIndex = 0
-        println("Scan: Closed TableScan.")
+        Logger.info("Scan: Closed TableScan.")
     }
 }

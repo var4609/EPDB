@@ -1,5 +1,6 @@
 package org.epdb.storage.manager
 
+import org.epdb.org.epdb.commons.Logger
 import org.epdb.storage.dto.Page
 import org.epdb.storage.dto.Page.Companion.HEADER_SIZE_IN_BYTES
 import org.epdb.storage.dto.Page.Companion.NO_NEXT_PAGE
@@ -22,14 +23,14 @@ internal class InMemoryStorageManager(
             Page(newPageId, storageProvider[newPageId]!!)
         } else {
             val pageData = this.storageProvider[pageId]!!
-            println("Reading page with ID $pageId")
+            Logger.info("Reading page with ID $pageId")
             Page(pageId, pageData)
         }
     }
 
     override fun writePage(pageId: Long, byteArray: ByteArray) {
         return if (byteArray.size < PAGE_SIZE) {
-            println("Writing page with ID $pageId")
+            Logger.info("Writing page with ID $pageId")
             storageProvider[pageId] = byteArray
         } else {
             throw IllegalArgumentException("Data size must be less than $PAGE_SIZE")

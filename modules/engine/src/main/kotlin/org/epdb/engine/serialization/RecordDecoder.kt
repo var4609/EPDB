@@ -8,6 +8,7 @@ import org.epdb.engine.dto.ColumnType
 import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.columntypes.IntValue
 import org.epdb.engine.columntypes.StringValue
+import org.epdb.org.epdb.commons.Logger
 
 object RecordDecoder {
 
@@ -27,7 +28,7 @@ object RecordDecoder {
                 }
             }
         } catch (e: BufferUnderflowException) {
-            println("Decoding record failed with exception $e. Returning empty record")
+            Logger.error("Decoding record failed with exception $e. Returning empty record")
             emptyList()
         }
     }

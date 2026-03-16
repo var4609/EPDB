@@ -31,7 +31,7 @@ object EngineModule {
     }
 
     val queryExecutor : Database by lazy {
-        Database(StorageModule.storageManager)
+        Database()
     }
 
     private val bufferManager : BufferManager by lazy {

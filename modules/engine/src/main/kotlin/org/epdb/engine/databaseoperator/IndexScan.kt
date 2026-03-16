@@ -7,6 +7,7 @@ import org.epdb.engine.dto.Tuple
 import org.epdb.engine.serialization.RecordDecoder
 import org.epdb.index.dto.PagePointer
 import org.epdb.index.manager.IndexManager
+import org.epdb.org.epdb.commons.Logger
 
 class IndexScan(
     private val bufferManager: BufferManager,
@@ -19,7 +20,7 @@ class IndexScan(
 
     override fun open() {
         pagePointers = indexManager.lookupEntry(this.searchKey)
-        println("IndexScan: Found ${pagePointers.size} pointers for key $searchKey.")
+        Logger.info("IndexScan: Found ${pagePointers.size} pointers for key $searchKey.")
     }
 
     override fun next(): Tuple? {
@@ -38,7 +39,7 @@ class IndexScan(
     override fun close() {
         pagePointers = emptyList()
         currentPagePointerIndex = 0
-        println("IndexScan: Closed.")
+        Logger.info("IndexScan: Closed.")
     }
 
     private fun fetchAndDecodeNextRecord(pagePointer: PagePointer) : Tuple? {

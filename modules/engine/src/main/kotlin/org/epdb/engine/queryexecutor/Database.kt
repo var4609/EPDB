@@ -7,69 +7,42 @@ import org.epdb.engine.comparisonoperator.ComparisonOperator
 import org.epdb.engine.databaseoperator.Operator
 import org.epdb.engine.dto.Tuple
 import org.epdb.org.epdb.commons.Logger
-import org.epdb.storage.manager.StorageManager
 
-class Database(
-    private val storageManager: StorageManager
-) {
+class Database {
 
-    init {
-//        repeat(3) { storageManager.allocatePage() }
-        Logger.info("Database initialized and ready.")
-    }
-
-    fun executeSelectQuery(tableName: String) {
-        if (!checkTableName(tableName)) {
-            return
-        }
-
+    fun executeSelectQuery() {
         val scanOperator = EngineModule.createTableScanOperator()
-        executeAndPrint(scanOperator, "SELECT * FROM users")
+        executeAndSink(scanOperator) { tuple -> Logger.info(tuple.toString()) }
     }
 
-    fun executeSelectQueryWithFilter(tableName: String) {
-        if (!checkTableName(tableName)) {
-            return
-        }
-
+    fun executeSelectQueryWithFilter() {
         val scanOperator = EngineModule.createTableScanOperator()
         val predicate = ComparisonPredicate(0, ComparisonOperator.GREATER_THAN, IntValue(102))
         val filterOperator = EngineModule.createSelectionOperator(scanOperator, predicate)
 
-        executeAndPrint(filterOperator, "SELECT * FROM users")
+        executeAndSink(filterOperator) { tuple -> Logger.info(tuple.toString()) }
     }
 
-    fun executeSelectQueryWithFilterAndProjection(tableName: String) {
-        if (!checkTableName(tableName)) return
-
-        val indexScanOperator = EngineModule.createIndexScanOperator(IntValue(5099))
-        val predicate = ComparisonPredicate(0, ComparisonOperator.EQUALS, IntValue(5099))
+    fun executeSelectQueryWithFilterAndProjection(searchKey: Int, projectionColumns: Set<Int>) : List<Tuple> {
+        val indexScanOperator = EngineModule.createIndexScanOperator(IntValue(searchKey))
+        val predicate = ComparisonPredicate(0, ComparisonOperator.EQUALS, IntValue(searchKey))
         val filterOperator = EngineModule.createSelectionOperator(indexScanOperator, predicate)
-        val projectionOperator = EngineModule.createProjectionOperator(filterOperator, setOf(0, 1))
+        val projectionOperator = EngineModule.createProjectionOperator(filterOperator, projectionColumns)
 
-        executeAndPrint(projectionOperator, "SELECT id, name FROM users WHERE id = 5099 (via IndexScan)")
+        val result = mutableListOf<Tuple>()
+        executeAndSink(projectionOperator) { tuple -> result.add(tuple) }
+
+        return result
     }
 
-    private fun executeAndPrint(rootOperator: Operator, queryDescription: String) {
-        Logger.info("\n--- Query Execution: $queryDescription ---")
-        Logger.info(mutableListOf("id", "name", "age").toString())
-        Logger.info("---------------------------------------------")
-
+    private fun executeAndSink(rootOperator: Operator, sink: (Tuple) -> Unit) {
         rootOperator.use { op ->
             op.open()
             var tuple: Tuple?
 
             while (op.next().also { tuple = it } != null) {
-                Logger.info(tuple.toString())
+                sink(tuple!!)
             }
         }
-    }
-
-    private fun checkTableName(tableName: String): Boolean {
-        if (tableName != "users") {
-            Logger.error("Table not found: $tableName")
-            return false
-        }
-        return true
     }
 }
