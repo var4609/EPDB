@@ -42,7 +42,7 @@ object EngineModule {
         IndexModule.indexManager
     }
 
-    fun createInsertOperator(tableName: String, tupleToInsert: Tuple) : Operator {
+    fun createInsertOperator(tupleToInsert: Tuple) : Operator {
         return Insert(
             bufferManager = bufferManager,
             tupleToInsert = tupleToInsert,

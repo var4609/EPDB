@@ -9,7 +9,6 @@ data class Tuple(val values: List<ColumnValue>) {
     }
 
     override fun toString(): String {
-
         return values.toString()
     }
 }

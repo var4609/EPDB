@@ -15,7 +15,7 @@ class Database(
 ) {
 
     init {
-        repeat(3) { storageManager.allocatePage() }
+//        repeat(3) { storageManager.allocatePage() }
         Logger.info("Database initialized and ready.")
     }
 
@@ -49,32 +49,6 @@ class Database(
         val projectionOperator = EngineModule.createProjectionOperator(tableName, filterOperator, setOf(0, 1))
 
         executeAndPrint(projectionOperator, "SELECT id, name FROM users WHERE id = 5099 (via IndexScan)")
-    }
-
-    fun executeInsert(tableName: String, tupleToInsert: Tuple) {
-        val insertOperator = EngineModule.createInsertOperator(
-            tableName = tableName,
-            tupleToInsert = tupleToInsert
-        )
-
-        insertOperator.use { op ->
-            op.open()
-            op.next()
-        }
-    }
-
-    fun populateTestData(tableName: String) {
-        Logger.info("\n--- Admin: Populating Test Data Directly to Storage ---")
-        val rowCount = 5000
-
-        for (i in 0..<rowCount) {
-            val id = IntValue(i + 100)
-            val name = StringValue("User_$i")
-            val age = IntValue(20 + i)
-
-            executeInsert(tableName, Tuple(listOf(id, name, age)))
-        }
-        Logger.info("--- Admin: Data population finished. ---")
     }
 
     private fun executeAndPrint(rootOperator: Operator, queryDescription: String) {

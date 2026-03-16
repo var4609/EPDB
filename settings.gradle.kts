@@ -12,10 +12,11 @@ plugins {
 }
 
 
-include("application", "engine", "buffer", "index", "storage", "commons")
-project(":application").projectDir = file("application/")
-project(":engine").projectDir = file("engine/")
-project(":buffer").projectDir = file("buffer/")
-project(":index").projectDir = file("index/")
-project(":storage").projectDir = file("storage/")
+include("application", "engine", "buffer", "index", "storage", "commons", "integration")
+project(":application").projectDir = file("modules/application/")
+project(":engine").projectDir = file("modules/engine/")
+project(":buffer").projectDir = file("modules/buffer/")
+project(":index").projectDir = file("modules/index/")
+project(":storage").projectDir = file("modules/storage/")
 project(":commons").projectDir = file("commons/")
+project(":integration").projectDir = file("integration/")

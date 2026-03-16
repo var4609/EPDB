@@ -1,6 +1,7 @@
 package org.epdb.app
 
 import org.epdb.engine.EngineModule.queryExecutor
+import org.epdb.engine.queryexecutor.InsertQueryExecutor
 import org.epdb.org.epdb.commons.Logger
 
 fun main(args: Array<String>) {
@@ -14,7 +15,8 @@ fun main(args: Array<String>) {
     if(args.isNotEmpty() && args.contains("--verify")) {
         Logger.info("* Verification mode enabled.")
     } else {
-        db.populateTestData(tableName)
+        val insertQueryExecutor = InsertQueryExecutor()
+        insertQueryExecutor.populateTestData("users")
         db.executeSelectQueryWithFilterAndProjection(tableName)
     }
 }
