@@ -5,9 +5,8 @@ import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.dto.Schema
 import org.epdb.engine.dto.Tuple
 import org.epdb.engine.serialization.RecordDecoder
-import org.epdb.index.manager.IndexManager
 import org.epdb.index.dto.PagePointer
-import java.nio.BufferUnderflowException
+import org.epdb.index.manager.IndexManager
 
 class IndexScan(
     private val bufferManager: BufferManager,

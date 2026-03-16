@@ -5,7 +5,6 @@ import org.epdb.engine.dto.Schema
 import org.epdb.engine.dto.Tuple
 import org.epdb.engine.serialization.RecordDecoder
 import org.epdb.storage.dto.Page
-import java.nio.BufferUnderflowException
 
 class TableScan(
     private val bufferManager: BufferManager,

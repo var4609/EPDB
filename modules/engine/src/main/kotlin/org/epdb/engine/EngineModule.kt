@@ -52,21 +52,21 @@ object EngineModule {
         )
     }
 
-    fun createProjectionOperator(tableName: String, childOperator: Operator, projectionColumns: Set<Int>) : Operator {
+    fun createProjectionOperator(childOperator: Operator, projectionColumns: Set<Int>) : Operator {
         return Projection(
             childOperator = childOperator,
             projectionColumns = projectionColumns
         )
     }
 
-    fun createSelectionOperator(tableName: String, childOperator: Operator, predicate: Predicate) : Operator {
+    fun createSelectionOperator(childOperator: Operator, predicate: Predicate) : Operator {
         return Selection(
             childOperator = childOperator,
             predicate = predicate
         )
     }
 
-    fun createIndexScanOperator(tableName: String, searchKey: ColumnValue) : Operator {
+    fun createIndexScanOperator(searchKey: ColumnValue) : Operator {
         return IndexScan(
             bufferManager = bufferManager,
             indexManager = indexManager,
@@ -77,7 +77,7 @@ object EngineModule {
         )
     }
 
-    fun createTableScanOperator(tableName: String) : Operator {
+    fun createTableScanOperator() : Operator {
         return TableScan(
             bufferManager = bufferManager,
             schema = schema,

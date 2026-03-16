@@ -87,7 +87,7 @@ class Insert(
 
         byteBuffer.putInt(id.value)
         byteBuffer.put(nameBytes, 0, min(nameBytes.size, NAME_SIZE))
-        for (i in nameBytes.size..<NAME_SIZE) {
+        for (i in nameBytes.size..< NAME_SIZE) {
             byteBuffer.put(0.toByte())
         }
         byteBuffer.putInt(age.value)

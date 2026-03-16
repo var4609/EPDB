@@ -7,7 +7,7 @@ internal class InMemoryIndexManager(
 ) : IndexManager {
 
     override fun addEntry(key: Any, pageId: Long, slotIndex: Int) {
-        val pagePointer = PagePointer(pageId, slotIndex);
+        val pagePointer = PagePointer(pageId, slotIndex)
         indexStore.computeIfAbsent(key) { mutableListOf() }.add(pagePointer)
     }
 

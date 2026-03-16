@@ -10,7 +10,7 @@ import org.epdb.org.epdb.commons.Logger
 class InsertQueryExecutor(
 ) {
 
-    fun insertData(tableName: String, tuple: List<ColumnValue>) {
+    fun insertData(tuple: List<ColumnValue>) {
         // convert generic input to tuple the storage will accept (this is where inference is needed)
 //        val tuple = Tuple(tuple.map { column ->
 //            StringValue(column)
@@ -33,7 +33,7 @@ class InsertQueryExecutor(
             val name = StringValue("User_$i")
             val age = IntValue(20 + i)
 
-            insertData(tableName, listOf(id, name, age))
+            insertData(listOf(id, name, age))
         }
         Logger.info("--- Admin: Data population finished. ---")
     }

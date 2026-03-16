@@ -2,7 +2,6 @@ package org.epdb.engine.queryexecutor
 
 import org.epdb.engine.EngineModule
 import org.epdb.engine.columntypes.IntValue
-import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.comparison.ComparisonPredicate
 import org.epdb.engine.comparisonoperator.ComparisonOperator
 import org.epdb.engine.databaseoperator.Operator
@@ -24,7 +23,7 @@ class Database(
             return
         }
 
-        val scanOperator = EngineModule.createTableScanOperator(tableName)
+        val scanOperator = EngineModule.createTableScanOperator()
         executeAndPrint(scanOperator, "SELECT * FROM users")
     }
 
@@ -33,9 +32,9 @@ class Database(
             return
         }
 
-        val scanOperator = EngineModule.createTableScanOperator(tableName)
+        val scanOperator = EngineModule.createTableScanOperator()
         val predicate = ComparisonPredicate(0, ComparisonOperator.GREATER_THAN, IntValue(102))
-        val filterOperator = EngineModule.createSelectionOperator(tableName, scanOperator, predicate)
+        val filterOperator = EngineModule.createSelectionOperator(scanOperator, predicate)
 
         executeAndPrint(filterOperator, "SELECT * FROM users")
     }
@@ -43,10 +42,10 @@ class Database(
     fun executeSelectQueryWithFilterAndProjection(tableName: String) {
         if (!checkTableName(tableName)) return
 
-        val indexScanOperator = EngineModule.createIndexScanOperator(tableName, IntValue(5099))
+        val indexScanOperator = EngineModule.createIndexScanOperator(IntValue(5099))
         val predicate = ComparisonPredicate(0, ComparisonOperator.EQUALS, IntValue(5099))
-        val filterOperator = EngineModule.createSelectionOperator(tableName, indexScanOperator, predicate)
-        val projectionOperator = EngineModule.createProjectionOperator(tableName, filterOperator, setOf(0, 1))
+        val filterOperator = EngineModule.createSelectionOperator(indexScanOperator, predicate)
+        val projectionOperator = EngineModule.createProjectionOperator(filterOperator, setOf(0, 1))
 
         executeAndPrint(projectionOperator, "SELECT id, name FROM users WHERE id = 5099 (via IndexScan)")
     }
