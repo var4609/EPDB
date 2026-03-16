@@ -1,4 +1,3 @@
-group = rootProject.group
 version = rootProject.version
 
 plugins {
