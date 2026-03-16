@@ -2,10 +2,7 @@ plugins {
     id("kotlin-conventions")
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
+    implementation(project(":storage"))
     implementation(project(":commons"))
 }
