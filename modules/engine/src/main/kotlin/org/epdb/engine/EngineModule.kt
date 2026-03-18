@@ -5,10 +5,10 @@ import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.comparison.Predicate
 import org.epdb.engine.databaseoperator.*
-import org.epdb.engine.dto.Schema
+import org.epdb.commons.engine.Schema
 import org.epdb.engine.dto.Tuple
-import org.epdb.engine.dto.ColumnDefinition
-import org.epdb.engine.dto.ColumnType
+import org.epdb.commons.engine.ColumnDefinition
+import org.epdb.commons.engine.ColumnType
 import org.epdb.engine.queryexecutor.Database
 import org.epdb.index.IndexModule
 import org.epdb.index.dto.PagePointer

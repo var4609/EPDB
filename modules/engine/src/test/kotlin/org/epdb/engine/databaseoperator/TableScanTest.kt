@@ -10,9 +10,9 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.columntypes.IntValue
-import org.epdb.engine.dto.Schema
-import org.epdb.engine.dto.ColumnDefinition
-import org.epdb.engine.dto.ColumnType
+import org.epdb.commons.engine.Schema
+import org.epdb.commons.engine.ColumnDefinition
+import org.epdb.commons.engine.ColumnType
 import org.epdb.storage.dto.Page
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

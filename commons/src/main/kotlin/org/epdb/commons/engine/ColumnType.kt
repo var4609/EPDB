@@ -1,4 +1,4 @@
-package org.epdb.engine.dto
+package org.epdb.commons.engine
 
 enum class ColumnType(val sizeInBytes: Int) {
     INT(4),

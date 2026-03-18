@@ -3,8 +3,8 @@ package org.epdb.engine.serialization
 import java.nio.ByteBuffer
 import java.nio.BufferUnderflowException
 import java.nio.ByteOrder
-import org.epdb.engine.dto.Schema
-import org.epdb.engine.dto.ColumnType
+import org.epdb.commons.engine.Schema
+import org.epdb.commons.engine.ColumnType
 import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.columntypes.IntValue
 import org.epdb.engine.columntypes.StringValue

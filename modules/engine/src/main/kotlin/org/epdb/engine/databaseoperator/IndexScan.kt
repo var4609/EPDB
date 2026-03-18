@@ -2,7 +2,7 @@ package org.epdb.engine.databaseoperator
 
 import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.columntypes.ColumnValue
-import org.epdb.engine.dto.Schema
+import org.epdb.commons.engine.Schema
 import org.epdb.engine.dto.Tuple
 import org.epdb.engine.serialization.RecordDecoder
 import org.epdb.index.dto.PagePointer

@@ -1,4 +1,4 @@
-package org.epdb.engine.dto
+package org.epdb.commons.engine
 
 data class Schema(val columnDefinitions: List<ColumnDefinition>) {
 
