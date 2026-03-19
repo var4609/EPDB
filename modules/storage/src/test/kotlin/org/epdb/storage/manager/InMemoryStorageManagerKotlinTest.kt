@@ -24,7 +24,7 @@ class InMemoryStorageManagerKotlinTest {
 
     @BeforeTest
     fun setUp() {
-        inMemoryStorageManager = InMemoryStorageManager(inMemoryStorage, nextPageId)
+        inMemoryStorageManager = InMemoryStorageManager(inMemoryStorage)
     }
 
     @Test
