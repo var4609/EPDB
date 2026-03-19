@@ -4,17 +4,16 @@ import org.epdb.org.epdb.commons.Logger
 import org.epdb.storage.dto.Page
 import org.epdb.storage.dto.Page.Companion.HEADER_SIZE_IN_BYTES
 import org.epdb.storage.dto.Page.Companion.NO_NEXT_PAGE
+import org.epdb.storage.util.GlobalPageAllocator
 import org.epdb.storage.util.initializePageWithHeader
 import java.nio.ByteBuffer
 
 internal class InMemoryStorageManager(
     private val storageProvider: MutableMap<Long, ByteArray> = mutableMapOf(),
-    private var nextPageId: Long = NEXT_PAGE_ID
 ): StorageManager {
 
     companion object {
         const val PAGE_SIZE: Int = 4096
-        const val NEXT_PAGE_ID: Long = 0L
     }
 
     override fun readPage(pageId: Long): Page {
@@ -39,10 +38,8 @@ internal class InMemoryStorageManager(
 
     override fun allocatePage(): Long {
         val data = createEmptyPageData()
-
-        return this.nextPageId.also { allocatedId ->
+        return GlobalPageAllocator.nextPageId.also { allocatedId ->
             storageProvider[allocatedId] = data
-            this.nextPageId += 1
         }
     }
 

@@ -30,7 +30,7 @@ class Database {
         val projectionOperator = EngineModule.createProjectionOperator(filterOperator, projectionColumns)
 
         val result = mutableListOf<Tuple>()
-        executeAndSink(projectionOperator) { tuple -> result.add(tuple) }
+        executeAndSink(projectionOperator) { tuple -> Logger.info(tuple.toString()) }
 
         return result
     }
