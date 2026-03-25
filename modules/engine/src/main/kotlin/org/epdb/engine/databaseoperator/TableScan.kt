@@ -10,6 +10,7 @@ import org.epdb.storage.dto.Page
 class TableScan(
     private val bufferManager: BufferManager,
     private val schema: Schema,
+    private val tableName: String,
     private val tableStartPageId: Long,
     private val maxAllocatedPageId: Long,
     private var currentSlotIndex: Int = 0,
@@ -18,7 +19,7 @@ class TableScan(
 ) : Operator {
 
     override fun open() {
-        currentPage = bufferManager.getPage(currentPageId)
+        currentPage = bufferManager.getPage(currentPageId, tableName)
         currentSlotIndex = 0
         Logger.info("TableScan opened at page ID: $currentPageId")
     }
@@ -37,7 +38,7 @@ class TableScan(
                     break
                 }
 
-                currentPage = bufferManager.getPage(currentPageId)
+                currentPage = bufferManager.getPage(currentPageId, tableName)
                 currentSlotIndex = 0
                 continue
             }

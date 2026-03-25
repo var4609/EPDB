@@ -10,13 +10,13 @@ import org.epdb.org.epdb.commons.Logger
 
 class Database {
 
-    fun executeSelectQuery() {
-        val scanOperator = EngineModule.createTableScanOperator()
+    fun executeSelectQuery(tableName: String) {
+        val scanOperator = EngineModule.createTableScanOperator(tableName)
         executeAndSink(scanOperator) { tuple -> Logger.info(tuple.toString()) }
     }
 
-    fun executeSelectQueryWithFilter() {
-        val scanOperator = EngineModule.createTableScanOperator()
+    fun executeSelectQueryWithFilter(tableName: String) {
+        val scanOperator = EngineModule.createTableScanOperator(tableName)
         val predicate = ComparisonPredicate(0, ComparisonOperator.GREATER_THAN, IntValue(102))
         val filterOperator = EngineModule.createSelectionOperator(scanOperator, predicate)
 

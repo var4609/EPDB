@@ -7,16 +7,15 @@ import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.dto.Tuple
 import org.epdb.org.epdb.commons.Logger
 
-class InsertQueryExecutor(
-) {
+class InsertQueryExecutor {
 
-    fun insertData(tuple: List<ColumnValue>) {
-        // convert generic input to tuple the storage will accept (this is where inference is needed)
+    fun insertData(tableName: String, tuple: List<ColumnValue>) {
+        // convert generic input to tuple the storage will accept (this is where type inference is needed)
 //        val tuple = Tuple(tuple.map { column ->
 //            StringValue(column)
 //        })
 
-        val insertOperator = EngineModule.createInsertOperator(tupleToInsert = Tuple(tuple))
+        val insertOperator = EngineModule.createInsertOperator(tableName, Tuple(tuple))
 
         insertOperator.use { op ->
             op.open()
@@ -33,7 +32,7 @@ class InsertQueryExecutor(
             val name = StringValue("User_$i")
             val age = IntValue(20 + i)
 
-            insertData(listOf(id, name, age))
+            insertData(tableName, listOf(id, name, age))
         }
         Logger.info("--- Admin: Data population finished. ---")
     }

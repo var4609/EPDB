@@ -10,13 +10,13 @@ internal class InMemoryBufferManager(
     private val bufferFrames: MutableMap<Long, BufferFrame>
 ) : BufferManager {
 
-    override fun getPage(pageId: Long): Page =
+    override fun getPage(pageId: Long, tableName: String): Page =
         bufferFrames.getOrPut(pageId) {
             if (bufferFrames.size >= bufferSize) {
                 evictPage()
             }
 
-            val newPage = storageManager.readPage(pageId)
+            val newPage = storageManager.readPage(pageId, tableName)
             BufferFrame(newPage)
         }.also { it.pinCount++ }.page
 
@@ -44,7 +44,7 @@ internal class InMemoryBufferManager(
         }
     }
 
-    override fun allocateNewPage(tableId: Int) = getPage(storageManager.allocatePage())
+    override fun allocateNewPage(tableName: String) = getPage(storageManager.allocatePage(tableName), tableName)
 
     private fun evictPage() {
         val victimKey = bufferFrames.keys.minOrNull()

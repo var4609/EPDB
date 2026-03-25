@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":buffer"))
     implementation(project(":storage"))
     implementation(project(":index"))
+    implementation(project(":catalog"))
     implementation(project(":commons"))
 }
 

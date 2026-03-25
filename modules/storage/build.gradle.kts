@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":commons"))
+    implementation(project(":catalog"))
 }
 
 sourceSets.main {

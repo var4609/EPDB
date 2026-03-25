@@ -43,7 +43,7 @@ class IndexScan(
     }
 
     private fun fetchAndDecodeNextRecord(pagePointer: PagePointer) : Tuple? {
-        val page = bufferManager.getPage(pagePointer.pageId)
+        val page = bufferManager.getPage(pagePointer.pageId, "tableName")
 
         return try {
             val recordBytes = page.getRecordAsByteBufferBySlotId(pagePointer.slotIndex)
