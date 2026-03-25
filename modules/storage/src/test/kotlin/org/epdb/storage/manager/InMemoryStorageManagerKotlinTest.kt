@@ -1,6 +1,11 @@
 package org.epdb.storage.manager
 
 import io.kotest.matchers.shouldBe
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import org.epdb.catalog.Catalog
 import org.epdb.storage.dto.Page.Companion.HEADER_FREE_SPACE_OFFSET_ADDR
 import org.epdb.storage.dto.Page.Companion.HEADER_NEXT_PAGE_ID_ADDR
 import org.epdb.storage.dto.Page.Companion.HEADER_NUM_ROWS_ADDR
@@ -19,12 +24,16 @@ class InMemoryStorageManagerKotlinTest {
     }
 
     private val inMemoryStorage: MutableMap<Long, ByteArray> = mutableMapOf()
+    private val catalog = mockk<Catalog> {
+        every { addPageIdToTable(any(), any()) } just Runs
+    }
     private val nextPageId: Long = 0L
+    private val tableName = "TABLE_NAME"
     private lateinit var inMemoryStorageManager: InMemoryStorageManager
 
     @BeforeTest
     fun setUp() {
-        inMemoryStorageManager = InMemoryStorageManager(inMemoryStorage)
+        inMemoryStorageManager = InMemoryStorageManager(inMemoryStorage, catalog)
     }
 
     @Test
@@ -40,7 +49,7 @@ class InMemoryStorageManagerKotlinTest {
 
     @Test
     fun `test readPage() creates new page if its not already present`() {
-        inMemoryStorageManager.readPage(nextPageId).apply {
+        inMemoryStorageManager.readPage(nextPageId, tableName).apply {
             this.pageId shouldBe nextPageId
             this.data.size shouldBe PAGE_SIZE
         }

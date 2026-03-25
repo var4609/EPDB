@@ -3,16 +3,12 @@ package org.epdb.engine.databaseoperator
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.epdb.buffer.manager.BufferManager
-import org.epdb.engine.columntypes.IntValue
-import org.epdb.commons.engine.Schema
 import org.epdb.commons.engine.ColumnDefinition
 import org.epdb.commons.engine.ColumnType
+import org.epdb.commons.engine.Schema
+import org.epdb.engine.columntypes.IntValue
 import org.epdb.storage.dto.Page
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -51,15 +47,17 @@ class TableScanTest : BehaviorSpec({
     Given("A TableScan over a single page with 2 records") {
         val recordData = createRecord(id = 1, name = "Alice", age = 30)
         val mockPage = createMockPage(numSlots = 2, recordData = recordData)
+        val tableName = "TABLE_NAME"
         val bufferManager : BufferManager = mockk {
-            every { getPage(START_PAGE_ID) } returns mockPage
-            every { getPage(MAX_PAGE_ID) } returns mockPage
+            every { getPage(START_PAGE_ID, tableName) } returns mockPage
+            every { getPage(MAX_PAGE_ID, tableName) } returns mockPage
             every { unpinPage(any(), any()) } just Runs
         }
 
         val scan = TableScan(
             bufferManager = bufferManager,
             schema =  MOCK_SCHEMA,
+            tableName = tableName,
             tableStartPageId =  START_PAGE_ID,
             maxAllocatedPageId =  MAX_PAGE_ID
         )
@@ -69,7 +67,7 @@ class TableScanTest : BehaviorSpec({
 
             Then("The start page should be pinned") {
                 verify (exactly = 1) {
-                    bufferManager.getPage(START_PAGE_ID)
+                    bufferManager.getPage(START_PAGE_ID, tableName)
                 }
             }
         }

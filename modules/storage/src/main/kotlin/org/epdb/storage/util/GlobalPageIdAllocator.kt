@@ -1,6 +1,6 @@
 package org.epdb.storage.util
 
-object GlobalPageAllocator {
+object GlobalPageIdAllocator {
 
     //TODO: Persist on disk
     @Volatile

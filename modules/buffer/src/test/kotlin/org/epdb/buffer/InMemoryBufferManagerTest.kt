@@ -25,20 +25,21 @@ class InMemoryBufferManagerTest : BehaviorSpec({
             bufferSize = bufferSize,
             storageManager = mockStorageManager
         )
+        val tableName = "TABLE_NAME"
 
         fun setupReadPage(pageId: Long, content: String = "data$pageId"): Page {
             val page = Page(pageId, content.toByteArray())
-            every { mockStorageManager.readPage(pageId) } returns page
+            every { mockStorageManager.readPage(pageId, tableName) } returns page
             return page
         }
 
         When("a non-existent page is requested (cache miss)") {
             val pageId = 1L
             val expectedPage = setupReadPage(pageId)
-            val resultPage = bufferManager.getPage(pageId)
+            val resultPage = bufferManager.getPage(pageId, tableName)
 
             Then("it should read the page from storage") {
-                verify(exactly = 1) { mockStorageManager.readPage(pageId) }
+                verify(exactly = 1) { mockStorageManager.readPage(pageId, tableName) }
             }
 
             Then("it should return the correct page") {
@@ -49,12 +50,12 @@ class InMemoryBufferManagerTest : BehaviorSpec({
         When("an existing page is requested (cache hit)") {
             val pageId = 2L
             val initialPage = setupReadPage(pageId)
-            bufferManager.getPage(pageId)
+            bufferManager.getPage(pageId, tableName)
 
-            val resultPage = bufferManager.getPage(pageId)
+            val resultPage = bufferManager.getPage(pageId, tableName)
 
             Then("it should not read the page from storage again") {
-                verify (exactly = 1) { mockStorageManager.readPage(pageId) }
+                verify (exactly = 1) { mockStorageManager.readPage(pageId, tableName) }
             }
 
             Then("it should return the same page instance") {
@@ -68,9 +69,9 @@ class InMemoryBufferManagerTest : BehaviorSpec({
             setupReadPage(3L)
             setupReadPage(4L)
 
-            bufferManager.getPage(1L)
-            bufferManager.getPage(2L)
-            bufferManager.getPage(3L)
+            bufferManager.getPage(1L, tableName)
+            bufferManager.getPage(2L, tableName)
+            bufferManager.getPage(3L, tableName)
 
             bufferManager.unpinPage(1L, true)
             bufferManager.unpinPage(2L, false)
@@ -78,7 +79,7 @@ class InMemoryBufferManagerTest : BehaviorSpec({
 
             every { mockStorageManager.writePage(any(), any()) } just Runs
 
-            bufferManager.getPage(4L)
+            bufferManager.getPage(4L, tableName)
 
             Then("it should flush the dirty victim page (1L)") {
                 verify(exactly = 1) { mockStorageManager.writePage(1L, p1.data) }
@@ -201,18 +202,19 @@ class InMemoryBufferManagerTest : BehaviorSpec({
             storageManager = mockStorageManager,
             bufferFrames = mutableMapOf()
         )
+        val tableName = "TABLE_NAME"
 
         When("a new page is allocated") {
             val allocatedId = 100L
             val allocatedPage = Page(allocatedId, ByteArray(4096))
 
-            every { mockStorageManager.allocatePage() } returns allocatedId
-            every { mockStorageManager.readPage(allocatedId) } returns allocatedPage
+            every { mockStorageManager.allocatePage(tableName) } returns allocatedId
+            every { mockStorageManager.readPage(allocatedId, tableName) } returns allocatedPage
 
-            bufferManager.allocateNewPage(tableId = 1)
+            bufferManager.allocateNewPage(tableName)
 
             Then("it should call allocatePage on the storage manager") {
-                verify(exactly = 1) { mockStorageManager.allocatePage() }
+                verify(exactly = 1) { mockStorageManager.allocatePage(tableName) }
             }
         }
     }

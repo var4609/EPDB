@@ -42,9 +42,10 @@ object EngineModule {
         IndexModule.indexManager
     }
 
-    fun createInsertOperator(tupleToInsert: Tuple) : Operator {
+    fun createInsertOperator(tableName: String, tupleToInsert: Tuple) : Operator {
         return Insert(
             bufferManager = bufferManager,
+            tableName = tableName,
             tupleToInsert = tupleToInsert,
             tableStartPageId = USERS_TABLE_START_PAGE,
             maxAllocatedPageCount = StorageModule.storageManager.getAllocatedPageCount() - 1L,
@@ -77,10 +78,11 @@ object EngineModule {
         )
     }
 
-    fun createTableScanOperator() : Operator {
+    fun createTableScanOperator(tableName: String) : Operator {
         return TableScan(
             bufferManager = bufferManager,
             schema = schema,
+            tableName = tableName,
             tableStartPageId = USERS_TABLE_START_PAGE,
             maxAllocatedPageId = StorageModule.storageManager.getAllocatedPageCount() - 1L
         )

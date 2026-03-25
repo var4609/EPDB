@@ -1,24 +1,26 @@
 package org.epdb.storage.manager
 
+import org.epdb.catalog.Catalog
 import org.epdb.org.epdb.commons.Logger
 import org.epdb.storage.dto.Page
 import org.epdb.storage.dto.Page.Companion.HEADER_SIZE_IN_BYTES
 import org.epdb.storage.dto.Page.Companion.NO_NEXT_PAGE
-import org.epdb.storage.util.GlobalPageAllocator
+import org.epdb.storage.util.GlobalPageIdAllocator
 import org.epdb.storage.util.initializePageWithHeader
 import java.nio.ByteBuffer
 
 internal class InMemoryStorageManager(
     private val storageProvider: MutableMap<Long, ByteArray> = mutableMapOf(),
+    private val catalog: Catalog
 ): StorageManager {
 
     companion object {
         const val PAGE_SIZE: Int = 4096
     }
 
-    override fun readPage(pageId: Long): Page {
+    override fun readPage(pageId: Long, tableName: String): Page {
         return if (!storageProvider.contains(pageId)) {
-            val newPageId = allocatePage()
+            val newPageId = allocatePage(tableName)
             Page(newPageId, storageProvider[newPageId]!!)
         } else {
             val pageData = this.storageProvider[pageId]!!
@@ -36,10 +38,11 @@ internal class InMemoryStorageManager(
         }
     }
 
-    override fun allocatePage(): Long {
+    override fun allocatePage(tableName: String): Long {
         val data = createEmptyPageData()
-        return GlobalPageAllocator.nextPageId.also { allocatedId ->
+        return GlobalPageIdAllocator.nextPageId.also { allocatedId ->
             storageProvider[allocatedId] = data
+            catalog.addPageIdToTable(tableName, allocatedId)
         }
     }
 

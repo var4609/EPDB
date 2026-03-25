@@ -15,6 +15,7 @@ import kotlin.math.min
 
 class Insert(
     private val bufferManager: BufferManager,
+    private val tableName: String,
     private val tupleToInsert: Tuple,
     private val maxAllocatedPageCount: Long,
     private val tableStartPageId: Long,
@@ -36,7 +37,7 @@ class Insert(
         val serializedTuple = serializeTuple(tupleToInsert)
 
         for (currentPageId in tableStartPageId..maxAllocatedPageCount) {
-            val page = bufferManager.getPage(currentPageId)
+            val page = bufferManager.getPage(currentPageId, tableName)
 
             try {
                 if (canInsertTuple(page, serializedTuple.size)) {
@@ -54,7 +55,7 @@ class Insert(
             }
         }
 
-        val newPage = this.bufferManager.allocateNewPage(0)
+        val newPage = this.bufferManager.allocateNewPage(tableName)
         try {
             updateColumnIndex(tupleToInsert.getValueAtIndex(INDEXED_COLUMN_ID), 0, newPage.pageId)
             newPage.writeTupleAndSlot(serializedTuple)
