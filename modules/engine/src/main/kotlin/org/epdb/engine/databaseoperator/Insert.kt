@@ -2,8 +2,6 @@ package org.epdb.engine.databaseoperator
 
 import org.epdb.buffer.manager.BufferManager
 import org.epdb.engine.columntypes.ColumnValue
-import org.epdb.engine.columntypes.IntValue
-import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.dto.Tuple
 import org.epdb.index.manager.IndexManager
 import org.epdb.org.epdb.commons.Logger
@@ -80,9 +78,9 @@ class Insert(
     }
 
     private fun serializeTuple(tuple: Tuple): ByteArray {
-        val id = tuple.getValueAtIndex(0) as? IntValue ?: throw IllegalArgumentException("Missing or invalid ID")
-        val name = tuple.getValueAtIndex(1) as? StringValue ?: throw IllegalArgumentException("Missing or invalid Name")
-        val age = tuple.getValueAtIndex(2) as? IntValue ?: throw IllegalArgumentException("Missing or invalid Age")
+        val id = tuple.getValueAtIndex(0) as? ColumnValue.IntValue ?: throw IllegalArgumentException("Missing or invalid ID")
+        val name = tuple.getValueAtIndex(1) as? ColumnValue.StringValue ?: throw IllegalArgumentException("Missing or invalid Name")
+        val age = tuple.getValueAtIndex(2) as? ColumnValue.IntValue ?: throw IllegalArgumentException("Missing or invalid Age")
 
         val nameBytes = name.value.toByteArray(StandardCharsets.UTF_8)
         val byteBuffer = ByteBuffer.allocate(Page.ROW_SIZE_IN_BYTES).order(ByteOrder.LITTLE_ENDIAN)
