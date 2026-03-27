@@ -8,15 +8,15 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import org.epdb.engine.columntypes.IntValue
+import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.comparison.Predicate
 import org.epdb.engine.dto.Tuple
 
 class SelectionTest : BehaviorSpec({
 
-    val TUPLE_MATCH = Tuple(listOf(IntValue(10)))
-    val TUPLE_NO_MATCH = Tuple(listOf(IntValue(5)))
-    val TUPLE_OTHER_MATCH = Tuple(listOf(IntValue(20)))
+    val TUPLE_MATCH = Tuple(listOf(ColumnValue.IntValue(10)))
+    val TUPLE_NO_MATCH = Tuple(listOf(ColumnValue.IntValue(5)))
+    val TUPLE_OTHER_MATCH = Tuple(listOf(ColumnValue.IntValue(20)))
 
     val mockChildOperator : Operator = mockk(relaxed = true)
     val mockPredicate : Predicate = mockk()

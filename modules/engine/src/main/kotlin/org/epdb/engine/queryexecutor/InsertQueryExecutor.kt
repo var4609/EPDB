@@ -1,25 +1,34 @@
 package org.epdb.engine.queryexecutor
 
+import org.epdb.catalog.Catalog
+import org.epdb.commons.engine.ColumnType
 import org.epdb.engine.EngineModule
 import org.epdb.engine.columntypes.ColumnValue
-import org.epdb.engine.columntypes.IntValue
-import org.epdb.engine.columntypes.StringValue
 import org.epdb.engine.dto.Tuple
 import org.epdb.org.epdb.commons.Logger
 
-class InsertQueryExecutor {
+class InsertQueryExecutor(private val catalog: Catalog) {
 
-    fun insertData(tableName: String, tuple: List<ColumnValue>) {
-        // convert generic input to tuple the storage will accept (this is where type inference is needed)
-//        val tuple = Tuple(tuple.map { column ->
-//            StringValue(column)
-//        })
+    fun insertData(tableName: String, tuple: List<String>) {
+        catalog.getTableSchema(tableName)?.let { schema ->
 
-        val insertOperator = EngineModule.createInsertOperator(tableName, Tuple(tuple))
+            assert(tuple.size == schema.columnDefinitions.size) {
+                Logger.error("Bad row being inserted, num columns do not match")
+            }
 
-        insertOperator.use { op ->
-            op.open()
-            op.next()
+            val tuple = tuple.zip(schema.columnDefinitions).map { (data, columnDef) ->
+                when (columnDef.columnType) {
+                    ColumnType.INT -> { ColumnValue.IntValue(data.toInt()) }
+                    ColumnType.STRING_FIXED_TYPE -> { ColumnValue.StringValue(data)}
+                }
+            }
+
+            val insertOperator = EngineModule.createInsertOperator(tableName, Tuple(tuple))
+
+            insertOperator.use { op ->
+                op.open()
+                op.next()
+            }
         }
     }
 
@@ -28,9 +37,9 @@ class InsertQueryExecutor {
         val rowCount = 5000
 
         for (i in 0..<rowCount) {
-            val id = IntValue(i + 100)
-            val name = StringValue("User_$i")
-            val age = IntValue(20 + i)
+            val id = "${i + 100}"
+            val name = "User_$i"
+            val age = "${i + 20}"
 
             insertData(tableName, listOf(id, name, age))
         }

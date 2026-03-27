@@ -8,7 +8,7 @@ import org.epdb.buffer.manager.BufferManager
 import org.epdb.commons.engine.ColumnDefinition
 import org.epdb.commons.engine.ColumnType
 import org.epdb.commons.engine.Schema
-import org.epdb.engine.columntypes.IntValue
+import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.storage.dto.Page
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -78,7 +78,7 @@ class TableScanTest : BehaviorSpec({
             Then("It should return the first tuple (Alice)") {
                 tuple shouldNotBe null
                 tuple!!.values.size shouldBe 3
-                tuple.values[0] shouldBe IntValue(1)
+                tuple.values[0] shouldBe ColumnValue.IntValue(1)
             }
         }
 

@@ -6,7 +6,8 @@ dependencies {
     implementation(projects.buffer)
     implementation(projects.storage)
     implementation(projects.index)
-    implementation(project(":commons"))
+    implementation(projects.catalog)
+    implementation(projects.commons)
 }
 
 sourceSets.main {

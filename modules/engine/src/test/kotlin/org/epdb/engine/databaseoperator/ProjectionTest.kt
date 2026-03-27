@@ -9,8 +9,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import org.epdb.engine.columntypes.IntValue
-import org.epdb.engine.columntypes.StringValue
+import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.dto.Tuple
 
 class ProjectionTest : BehaviorSpec({
@@ -20,9 +19,9 @@ class ProjectionTest : BehaviorSpec({
     val AGE_INDEX = 2
     val FULL_TUPLE = Tuple(
         values = listOf(
-            IntValue(1),        // Index 0: ID
-            StringValue("Alice"), // Index 1: Name
-            IntValue(30)         // Index 2: Age
+            ColumnValue.IntValue(1),        // Index 0: ID
+            ColumnValue.StringValue("Alice"), // Index 1: Name
+            ColumnValue.IntValue(30)         // Index 2: Age
         )
     )
     val EMPTY_TUPLE = Tuple(emptyList())
@@ -86,8 +85,8 @@ class ProjectionTest : BehaviorSpec({
 
             Then("The resulting values should be Name and Age") {
                 result?.values shouldContainExactly listOf(
-                    StringValue("Alice"),
-                    IntValue(30)
+                    ColumnValue.StringValue("Alice"),
+                    ColumnValue.IntValue(30)
                 )
             }
         }
@@ -103,8 +102,8 @@ class ProjectionTest : BehaviorSpec({
 
             Then("The resulting tuple values should be ID then Age (based on input index order)") {
                 result?.values shouldContainExactly listOf(
-                    IntValue(1),      // ID (Index 0)
-                    IntValue(30)      // Age (Index 2)
+                    ColumnValue.IntValue(1),      // ID (Index 0)
+                    ColumnValue.IntValue(30)      // Age (Index 2)
                 )
             }
         }

@@ -6,8 +6,6 @@ import java.nio.ByteOrder
 import org.epdb.commons.engine.Schema
 import org.epdb.commons.engine.ColumnType
 import org.epdb.engine.columntypes.ColumnValue
-import org.epdb.engine.columntypes.IntValue
-import org.epdb.engine.columntypes.StringValue
 import org.epdb.org.epdb.commons.Logger
 
 object RecordDecoder {
@@ -18,12 +16,12 @@ object RecordDecoder {
             recordSchema.columnDefinitions.map { column ->
                 when(column.columnType) {
                     ColumnType.INT -> {
-                        IntValue(buffer.getInt())
+                        ColumnValue.IntValue(buffer.getInt())
                     }
                     ColumnType.STRING_FIXED_TYPE -> {
                         val nameBytes = ByteArray(ColumnType.STRING_FIXED_TYPE.sizeInBytes)
                         buffer.get(nameBytes)
-                        StringValue(String(nameBytes).trim())
+                        ColumnValue.StringValue(String(nameBytes).trim())
                     }
                 }
             }

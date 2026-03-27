@@ -10,34 +10,34 @@ import kotlin.test.assertFailsWith
 class StringValueTest : BehaviorSpec({
 
     Given("A Candidate StringValue instance with some value") {
-        val candidate = StringValue("K")
+        val candidate = ColumnValue.StringValue("K")
 
         When("comparing it to another StringValue") {
             Then("it should return positive value when the candidate lexographically greater") {
-                val other = StringValue("A")
+                val other = ColumnValue.StringValue("A")
 
-                candidate.comparesTo(other) shouldBeGreaterThan 0
+                candidate.compareTo(other) shouldBeGreaterThan 0
             }
 
             Then("it should return 0 when the candidate lexographically equal") {
-                val other = StringValue("K")
+                val other = ColumnValue.StringValue("K")
 
-                candidate.comparesTo(other) shouldBe 0
+                candidate.compareTo(other) shouldBe 0
             }
 
             Then("it should return negative value when the candidate lexographically smaller") {
-                val other = StringValue("P")
+                val other = ColumnValue.StringValue("P")
 
-                candidate.comparesTo(other) shouldBeLessThan 0
+                candidate.compareTo(other) shouldBeLessThan 0
             }
         }
 
         When("comparing it with a non-String ColumnValue") {
-            val incompatibleValue = IntValue(10)
+            val incompatibleValue = ColumnValue.IntValue(10)
 
             Then("it should throw a ClassCastException") {
                 val exception = assertFailsWith<ClassCastException> {
-                    candidate.comparesTo(incompatibleValue)
+                    candidate.compareTo(incompatibleValue)
                 }
 
                 exception.message shouldNotBe null
@@ -46,8 +46,8 @@ class StringValueTest : BehaviorSpec({
     }
 
     Given("two StringValue objects with the same value") {
-        val valueA = StringValue("TEST")
-        val valueB = StringValue("TEST")
+        val valueA = ColumnValue.StringValue("TEST")
+        val valueB = ColumnValue.StringValue("TEST")
 
         When("they are compared for equality") {
 

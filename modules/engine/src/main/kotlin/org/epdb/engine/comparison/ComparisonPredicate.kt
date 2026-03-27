@@ -12,7 +12,7 @@ data class ComparisonPredicate(
 
     override fun evaluate(tuple: Tuple): Boolean {
         val columnValue = tuple.getValueAtIndex(columnIndex)
-        val comparison = columnValue.comparesTo(constantValue)
+        val comparison = columnValue.compareTo(constantValue)
 
         return comparisonOperator.apply(comparison)
     }
