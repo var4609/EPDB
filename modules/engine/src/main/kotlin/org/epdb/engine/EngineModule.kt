@@ -2,6 +2,8 @@ package org.epdb.engine
 
 import org.epdb.buffer.BufferModule
 import org.epdb.buffer.manager.BufferManager
+import org.epdb.catalog.Catalog
+import org.epdb.catalog.CatalogModule
 import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.comparison.Predicate
 import org.epdb.engine.databaseoperator.*
@@ -42,9 +44,14 @@ object EngineModule {
         IndexModule.indexManager
     }
 
+    private val catalog : Catalog by lazy {
+        CatalogModule.catalog
+    }
+
     fun createInsertOperator(tableName: String, tupleToInsert: Tuple) : Operator {
         return Insert(
             bufferManager = bufferManager,
+            catalog = catalog,
             tableName = tableName,
             tupleToInsert = tupleToInsert,
             tableStartPageId = USERS_TABLE_START_PAGE,
