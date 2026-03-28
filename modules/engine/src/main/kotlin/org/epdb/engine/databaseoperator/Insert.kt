@@ -1,6 +1,7 @@
 package org.epdb.engine.databaseoperator
 
 import org.epdb.buffer.manager.BufferManager
+import org.epdb.catalog.Catalog
 import org.epdb.engine.columntypes.ColumnValue
 import org.epdb.engine.dto.Tuple
 import org.epdb.index.manager.IndexManager
@@ -13,6 +14,7 @@ import kotlin.math.min
 
 class Insert(
     private val bufferManager: BufferManager,
+    private val catalog: Catalog,
     private val tableName: String,
     private val tupleToInsert: Tuple,
     private val maxAllocatedPageCount: Long,
@@ -69,28 +71,28 @@ class Insert(
     private fun canInsertTuple(page: Page, requiredSize: Int) : Boolean {
         val currentNumSlots = page.currentNumSlots
         val nextSlotAddress = Page.PAGE_SIZE_IN_BYTES - ((currentNumSlots + 1) * Page.SLOT_SIZE_IN_BYTES)
-
         return page.freeSpaceOffset + requiredSize < nextSlotAddress
     }
 
-    private fun updateColumnIndex(key: ColumnValue, slotIndex: Int, pageId: Long) {
+    private fun updateColumnIndex(key: ColumnValue, slotIndex: Int, pageId: Long) =
         indexManager.addEntry(key, pageId, slotIndex)
-    }
 
     private fun serializeTuple(tuple: Tuple): ByteArray {
-        val id = tuple.getValueAtIndex(0) as? ColumnValue.IntValue ?: throw IllegalArgumentException("Missing or invalid ID")
-        val name = tuple.getValueAtIndex(1) as? ColumnValue.StringValue ?: throw IllegalArgumentException("Missing or invalid Name")
-        val age = tuple.getValueAtIndex(2) as? ColumnValue.IntValue ?: throw IllegalArgumentException("Missing or invalid Age")
-
-        val nameBytes = name.value.toByteArray(StandardCharsets.UTF_8)
         val byteBuffer = ByteBuffer.allocate(Page.ROW_SIZE_IN_BYTES).order(ByteOrder.LITTLE_ENDIAN)
-
-        byteBuffer.putInt(id.value)
-        byteBuffer.put(nameBytes, 0, min(nameBytes.size, NAME_SIZE))
-        for (i in nameBytes.size..< NAME_SIZE) {
-            byteBuffer.put(0.toByte())
+        tuple.values.forEach { data ->
+            when (data) {
+                is ColumnValue.IntValue -> {
+                    byteBuffer.putInt(data.value)
+                }
+                is ColumnValue.StringValue -> {
+                    val nameBytes = data.value.toByteArray(StandardCharsets.UTF_8)
+                    byteBuffer.put(nameBytes, 0, min(nameBytes.size, NAME_SIZE))
+                    for (i in nameBytes.size..< NAME_SIZE) {
+                        byteBuffer.put(0.toByte())
+                    }
+                }
+            }
         }
-        byteBuffer.putInt(age.value)
 
         return byteBuffer.array()
     }
