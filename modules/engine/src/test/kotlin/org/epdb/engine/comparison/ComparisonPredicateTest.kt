@@ -2,7 +2,7 @@ package org.epdb.engine.comparison
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.engine.comparisonoperator.ComparisonOperator
 import org.epdb.engine.dto.Tuple
 

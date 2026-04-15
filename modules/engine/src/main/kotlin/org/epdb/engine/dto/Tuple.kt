@@ -1,6 +1,6 @@
 package org.epdb.engine.dto
 
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 
 data class Tuple(val values: List<ColumnValue>) {
 

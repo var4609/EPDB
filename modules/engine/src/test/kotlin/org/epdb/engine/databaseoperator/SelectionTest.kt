@@ -8,7 +8,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.engine.comparison.Predicate
 import org.epdb.engine.dto.Tuple
 

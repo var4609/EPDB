@@ -5,6 +5,7 @@ import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import kotlin.test.assertFailsWith
 
 class StringValueTest : BehaviorSpec({

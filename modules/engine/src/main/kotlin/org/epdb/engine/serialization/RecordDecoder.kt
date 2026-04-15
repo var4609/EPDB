@@ -5,7 +5,7 @@ import java.nio.BufferUnderflowException
 import java.nio.ByteOrder
 import org.epdb.commons.engine.Schema
 import org.epdb.commons.engine.ColumnType
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.org.epdb.commons.Logger
 
 object RecordDecoder {

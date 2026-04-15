@@ -1,7 +1,7 @@
 package org.epdb.engine.queryexecutor
 
 import org.epdb.engine.EngineModule
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.engine.comparison.ComparisonPredicate
 import org.epdb.engine.comparisonoperator.ComparisonOperator
 import org.epdb.engine.databaseoperator.Operator
