@@ -1,6 +1,6 @@
 package org.epdb.engine.comparison
 
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.engine.dto.Tuple
 import org.epdb.engine.comparisonoperator.ComparisonOperator
 

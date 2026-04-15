@@ -10,6 +10,10 @@ class InMemoryCatalog(
         return catalogMap[tableName]?.tableSchema
     }
 
+    override fun getRowSizeInBytes(tableName: String): Int {
+        return catalogMap[tableName]?.rowSizeInBytes ?: 0
+    }
+
     override fun setTableSchema(tableName: String, schema: Schema) {
         catalogMap[tableName] = TableCatalog(
             tableId = catalogMap.size + 1,

@@ -3,6 +3,7 @@ package org.epdb.engine.columntypes
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import kotlin.test.assertFailsWith
 
 class IntValueTest : BehaviorSpec({

@@ -2,15 +2,14 @@ package org.epdb.engine.databaseoperator
 
 import org.epdb.buffer.manager.BufferManager
 import org.epdb.catalog.Catalog
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.engine.dto.Tuple
 import org.epdb.index.manager.IndexManager
 import org.epdb.org.epdb.commons.Logger
+import org.epdb.org.epdb.commons.util.SerializationService
 import org.epdb.storage.dto.Page
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.nio.charset.StandardCharsets
-import kotlin.math.min
 
 class Insert(
     private val bufferManager: BufferManager,
@@ -24,7 +23,6 @@ class Insert(
 ) : Operator {
 
     companion object {
-        private const val NAME_SIZE = 20
         private const val INDEXED_COLUMN_ID = 0
     }
 
@@ -78,20 +76,12 @@ class Insert(
         indexManager.addEntry(key, pageId, slotIndex)
 
     private fun serializeTuple(tuple: Tuple): ByteArray {
-        val byteBuffer = ByteBuffer.allocate(Page.ROW_SIZE_IN_BYTES).order(ByteOrder.LITTLE_ENDIAN)
-        tuple.values.forEach { data ->
-            when (data) {
-                is ColumnValue.IntValue -> {
-                    byteBuffer.putInt(data.value)
-                }
-                is ColumnValue.StringValue -> {
-                    val nameBytes = data.value.toByteArray(StandardCharsets.UTF_8)
-                    byteBuffer.put(nameBytes, 0, min(nameBytes.size, NAME_SIZE))
-                    for (i in nameBytes.size..< NAME_SIZE) {
-                        byteBuffer.put(0.toByte())
-                    }
-                }
-            }
+        val schema = catalog.getTableSchema(tableName)?: throw IllegalArgumentException("Table $tableName does not exist")
+        val rowSizeInBytes = catalog.getRowSizeInBytes(tableName)
+        val byteBuffer = ByteBuffer.allocate(rowSizeInBytes).order(ByteOrder.LITTLE_ENDIAN)
+
+        tuple.values.zip(schema.columnDefinitions).forEach { (tupleValue, colDef) ->
+            SerializationService.serialize(tupleValue, colDef.columnType, byteBuffer)
         }
 
         return byteBuffer.array()

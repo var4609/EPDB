@@ -4,7 +4,7 @@ import org.epdb.buffer.BufferModule
 import org.epdb.buffer.manager.BufferManager
 import org.epdb.catalog.Catalog
 import org.epdb.catalog.CatalogModule
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.engine.comparison.Predicate
 import org.epdb.engine.databaseoperator.*
 import org.epdb.commons.engine.Schema

@@ -8,7 +8,7 @@ import org.epdb.buffer.manager.BufferManager
 import org.epdb.commons.engine.ColumnDefinition
 import org.epdb.commons.engine.ColumnType
 import org.epdb.commons.engine.Schema
-import org.epdb.engine.columntypes.ColumnValue
+import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.storage.dto.Page
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
