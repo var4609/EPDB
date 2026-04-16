@@ -1,15 +1,15 @@
 package org.epdb.engine.databaseoperator
 
 import org.epdb.buffer.manager.BufferManager
-import org.epdb.commons.engine.Schema
+import org.epdb.catalog.Catalog
 import org.epdb.engine.dto.Tuple
-import org.epdb.engine.serialization.RecordDecoder
 import org.epdb.org.epdb.commons.Logger
+import org.epdb.org.epdb.commons.util.SerializationService
 import org.epdb.storage.dto.Page
 
 class TableScan(
     private val bufferManager: BufferManager,
-    private val schema: Schema,
+    private val catalog: Catalog,
     private val tableName: String,
     private val tableStartPageId: Long,
     private val maxAllocatedPageId: Long,
@@ -44,7 +44,10 @@ class TableScan(
             }
 
             val recordBytes = currentPage!!.getRecordAsByteBufferBySlotId(currentSlotIndex)
-            val values = RecordDecoder.deserialize(recordBytes, schema)
+            val values = SerializationService.deserialize(
+                byteBuffer = recordBytes,
+                schema = catalog.getTableSchema(tableName) ?: throw IllegalStateException("Table $tableName does not exist.")
+            )
 
             currentSlotIndex++
             return Tuple(values)

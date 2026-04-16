@@ -23,12 +23,12 @@ fun main(args: Array<String>) {
         Logger.disabled()
         val insertQueryExecutor = InsertQueryExecutor(catalog)
         insertQueryExecutor.populateTestData("users")
-        val result = db.executeSelectQueryWithFilterAndProjection(5099, setOf(0, 1))
+        val result = db.executeSelectQueryWithFilterAndProjection(tableName, 5099, setOf(0, 1))
         assert(result.size == 1)
     } else {
         val insertQueryExecutor = InsertQueryExecutor(catalog)
         insertQueryExecutor.populateTestData("users")
-        db.executeSelectQueryWithFilterAndProjection(5099, setOf(0, 1))
+        db.executeSelectQueryWithFilterAndProjection(tableName, 5099, setOf(0, 1))
     }
 }
 

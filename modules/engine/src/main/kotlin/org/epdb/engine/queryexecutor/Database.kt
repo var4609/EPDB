@@ -23,8 +23,8 @@ class Database {
         executeAndSink(filterOperator) { tuple -> Logger.info(tuple.toString()) }
     }
 
-    fun executeSelectQueryWithFilterAndProjection(searchKey: Int, projectionColumns: Set<Int>) : List<Tuple> {
-        val indexScanOperator = EngineModule.createIndexScanOperator(ColumnValue.IntValue(searchKey))
+    fun executeSelectQueryWithFilterAndProjection(tableName: String, searchKey: Int, projectionColumns: Set<Int>) : List<Tuple> {
+        val indexScanOperator = EngineModule.createIndexScanOperator(ColumnValue.IntValue(searchKey), tableName)
         val predicate = ComparisonPredicate(0, ComparisonOperator.EQUALS, ColumnValue.IntValue(searchKey))
         val filterOperator = EngineModule.createSelectionOperator(indexScanOperator, predicate)
         val projectionOperator = EngineModule.createProjectionOperator(filterOperator, projectionColumns)

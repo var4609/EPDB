@@ -1,18 +1,19 @@
 package org.epdb.engine.databaseoperator
 
 import org.epdb.buffer.manager.BufferManager
+import org.epdb.catalog.Catalog
 import org.epdb.org.epdb.commons.engine.ColumnValue
-import org.epdb.commons.engine.Schema
 import org.epdb.engine.dto.Tuple
-import org.epdb.engine.serialization.RecordDecoder
 import org.epdb.index.dto.PagePointer
 import org.epdb.index.manager.IndexManager
 import org.epdb.org.epdb.commons.Logger
+import org.epdb.org.epdb.commons.util.SerializationService
 
 class IndexScan(
     private val bufferManager: BufferManager,
     private val indexManager: IndexManager,
-    private val schema: Schema,
+    private val catalog: Catalog,
+    private val tableName: String,
     private val searchKey: ColumnValue,
     private var pagePointers: List<PagePointer> = emptyList(),
     private var currentPagePointerIndex: Int = 0,
@@ -47,7 +48,10 @@ class IndexScan(
 
         return try {
             val recordBytes = page.getRecordAsByteBufferBySlotId(pagePointer.slotIndex)
-            val values : List<ColumnValue> = RecordDecoder.deserialize(recordBytes, schema)
+            val values = SerializationService.deserialize(
+                byteBuffer = recordBytes,
+                schema = catalog.getTableSchema(tableName) ?: throw IllegalStateException("Table '$tableName' not found")
+            )
 
             if (values.isEmpty()) null else Tuple(values)
         } finally {
