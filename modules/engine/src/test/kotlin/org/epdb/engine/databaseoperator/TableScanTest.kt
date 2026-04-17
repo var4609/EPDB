@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.*
 import org.epdb.buffer.manager.BufferManager
+import org.epdb.catalog.Catalog
 import org.epdb.commons.engine.ColumnDefinition
 import org.epdb.commons.engine.ColumnType
 import org.epdb.commons.engine.Schema
@@ -53,12 +54,15 @@ class TableScanTest : BehaviorSpec({
             every { getPage(MAX_PAGE_ID, tableName) } returns mockPage
             every { unpinPage(any(), any()) } just Runs
         }
+        val catalog: Catalog = mockk<Catalog> {
+            every { getTableSchema(any()) } returns MOCK_SCHEMA
+        }
 
         val scan = TableScan(
             bufferManager = bufferManager,
-            schema =  MOCK_SCHEMA,
             tableName = tableName,
             tableStartPageId =  START_PAGE_ID,
+            catalog = catalog,
             maxAllocatedPageId =  MAX_PAGE_ID
         )
 

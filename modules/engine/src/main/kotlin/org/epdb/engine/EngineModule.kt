@@ -7,10 +7,7 @@ import org.epdb.catalog.CatalogModule
 import org.epdb.org.epdb.commons.engine.ColumnValue
 import org.epdb.engine.comparison.Predicate
 import org.epdb.engine.databaseoperator.*
-import org.epdb.commons.engine.Schema
 import org.epdb.engine.dto.Tuple
-import org.epdb.commons.engine.ColumnDefinition
-import org.epdb.commons.engine.ColumnType
 import org.epdb.engine.queryexecutor.Database
 import org.epdb.index.IndexModule
 import org.epdb.index.dto.PagePointer
@@ -20,13 +17,6 @@ import org.epdb.storage.StorageModule
 object EngineModule {
 
     private const val USERS_TABLE_START_PAGE = 0L
-
-    private val schema : Schema by lazy {
-        val idCol = ColumnDefinition("id", ColumnType.INT)
-        val nameCol = ColumnDefinition("name", ColumnType.STRING_FIXED_TYPE)
-        val ageCol = ColumnDefinition("age", ColumnType.INT)
-        Schema(mutableListOf(idCol, nameCol, ageCol))
-    }
 
     private val pagePointers : List<PagePointer> by lazy {
         mutableListOf()
@@ -74,11 +64,12 @@ object EngineModule {
         )
     }
 
-    fun createIndexScanOperator(searchKey: ColumnValue) : Operator {
+    fun createIndexScanOperator(searchKey: ColumnValue, tableName: String) : Operator {
         return IndexScan(
             bufferManager = bufferManager,
             indexManager = indexManager,
-            schema = schema,
+            tableName = tableName,
+            catalog = catalog,
             searchKey = searchKey,
             pagePointers = pagePointers,
             currentPagePointerIndex = 0
@@ -88,7 +79,7 @@ object EngineModule {
     fun createTableScanOperator(tableName: String) : Operator {
         return TableScan(
             bufferManager = bufferManager,
-            schema = schema,
+            catalog = catalog,
             tableName = tableName,
             tableStartPageId = USERS_TABLE_START_PAGE,
             maxAllocatedPageId = StorageModule.storageManager.getAllocatedPageCount() - 1L
