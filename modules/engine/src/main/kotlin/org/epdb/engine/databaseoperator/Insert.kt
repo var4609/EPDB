@@ -16,8 +16,6 @@ class Insert(
     private val catalog: Catalog,
     private val tableName: String,
     private val tupleToInsert: Tuple,
-    private val maxAllocatedPageCount: Long,
-    private val tableStartPageId: Long,
     private val indexManager: IndexManager,
     private var isExecuted: Boolean = false
 ) : Operator {
@@ -34,7 +32,7 @@ class Insert(
 
         val serializedTuple = serializeTuple(tupleToInsert)
 
-        for (currentPageId in tableStartPageId..maxAllocatedPageCount) {
+        catalog.getTablePageIds(tableName).forEach { currentPageId ->
             val page = bufferManager.getPage(currentPageId, tableName)
 
             try {

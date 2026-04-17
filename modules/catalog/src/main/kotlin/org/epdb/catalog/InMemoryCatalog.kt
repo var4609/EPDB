@@ -10,6 +10,10 @@ class InMemoryCatalog(
         return catalogMap[tableName]?.tableSchema
     }
 
+    override fun getTablePageIds(tableName: String): List<Long> {
+        return catalogMap[tableName]?.pageIds ?: emptyList()
+    }
+
     override fun getRowSizeInBytes(tableName: String): Int {
         return catalogMap[tableName]?.rowSizeInBytes ?: 0
     }

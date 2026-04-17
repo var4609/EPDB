@@ -8,6 +8,8 @@ interface Catalog {
 
     fun getRowSizeInBytes(tableName: String): Int
 
+    fun getTablePageIds(tableName: String): List<Long>
+
     fun setTableSchema(tableName: String, schema: Schema)
 
     fun removeTableSchema(tableName: String)
