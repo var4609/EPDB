@@ -44,8 +44,6 @@ object EngineModule {
             catalog = catalog,
             tableName = tableName,
             tupleToInsert = tupleToInsert,
-            tableStartPageId = USERS_TABLE_START_PAGE,
-            maxAllocatedPageCount = StorageModule.storageManager.getAllocatedPageCount() - 1L,
             indexManager = indexManager
         )
     }
